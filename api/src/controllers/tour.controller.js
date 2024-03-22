@@ -1,8 +1,18 @@
 import { Tour } from '~/models/tour.model'
+import { ApiFeatures } from '~/utils/ApiFeatures'
+
+export const aliasTopTours = (req, res, next) => {
+  req.query.limit = '5'
+  req.query.sort = '-ratingsAverage,price'
+  req.query.fields = 'name,price,ratingsAverage,summary,difficulty'
+  next()
+}
 
 export const getAllTours = async (req, res) => {
   try {
-    const tours = await Tour.find()
+    const features = new ApiFeatures(Tour.find(), req.query)
+
+    const tours = await features.filter().sort().limitFields().paginate().query
 
     res
       .status(200)
