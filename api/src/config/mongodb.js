@@ -1,4 +1,4 @@
-/* eslint-disable */
+/* eslint-disable no-console */
 import mongoose from 'mongoose'
 import { env } from './env'
 
