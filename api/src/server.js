@@ -13,8 +13,26 @@ app.use(express.static(`${__dirname}/public`))
 app.use('/api/v1', router)
 app.use(errorMiddleware)
 
-app.listen(env.PORT, async () => {
+const server = app.listen(env.PORT, async () => {
   await connectDB()
 
   console.log(`Server running on port ${env.PORT}`)
+})
+
+process.on('unhandledRejection', (err) => {
+  console.log('UNHANDLED REJECTION! Shutting down...')
+  console.log(err.name, err.message)
+
+  server.close(() => {
+    process.exit(1)
+  })
+})
+
+process.on('uncaughtException', (err) => {
+  console.log('UNCAUGHT EXCEPTION! Shutting down...')
+  console.log(err.name, err.message)
+
+  server.close(() => {
+    process.exit(1)
+  })
 })
