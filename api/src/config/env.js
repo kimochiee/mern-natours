@@ -6,17 +6,18 @@ export const env = {
   BUILD_MODE: process.env.BUILD_MODE,
   jwt: {
     SECRET: process.env.JWT_SECRET,
-    EXPIRES_IN: process.env.JWT_EXPIRES_IN
+    EXPIRES_IN: process.env.JWT_EXPIRES_IN,
+    COOKIE_EXPIRES_IN: process.env.JWT_COOKIE_EXPIRES_IN
   },
   email: {
-    SMTP: {
-      HOST: process.env.SENDGRID_HOST,
-      PORT: process.env.SENDGRID_PORT,
-      AUTH: {
-        USER: process.env.SENDGRID_USERNAME,
-        PASS: process.env.SENDGRID_PASSWORD
+    smtp: {
+      host: process.env.SENDGRID_HOST,
+      port: process.env.SENDGRID_PORT,
+      auth: {
+        user: process.env.SENDGRID_USERNAME,
+        pass: process.env.SENDGRID_PASSWORD
       }
     },
-    FROM: process.env.EMAIL_FROM
+    from: process.env.EMAIL_FROM
   }
 }

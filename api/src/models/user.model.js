@@ -1,6 +1,7 @@
 import mongoose from 'mongoose'
 import validator from 'validator'
 import bcrypt from 'bcryptjs'
+import crypto from 'crypto'
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -52,6 +53,20 @@ userSchema.pre('save', async function (next) {
 
   this.password = await bcrypt.hash(this.password, 12)
   this.passwordConfirm = undefined
+  next()
+})
+
+// Update passwordChangedAt property
+userSchema.pre('save', function (next) {
+  if (!this.isModified('password') || this.isNew) return next()
+
+  this.passwordChangedAt = Date.now() - 1000
+  next()
+})
+
+// Hide inactive users
+userSchema.pre(/^find/, function (next) {
+  this.find({ active: { $ne: false } })
   next()
 })
 

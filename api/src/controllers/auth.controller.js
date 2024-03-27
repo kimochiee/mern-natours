@@ -4,6 +4,7 @@ import { User } from '~/models/user.model'
 import { ApiError } from '~/utils/ApiError'
 import Email from '~/utils/Email'
 import { catchAsync } from '~/utils/catchAsync'
+import crypto from 'crypto'
 
 const signToken = (id) => {
   return sign({ id }, env.jwt.SECRET, {
@@ -19,9 +20,21 @@ export const signUp = catchAsync(async (req, res, next) => {
     passwordConfirm: req.body.passwordConfirm
   })
 
+  const { password: pass, ...rest } = user._doc
+
   const token = signToken(user._id)
 
-  res.status(201).json({ status: 'success', token, data: { user } })
+  res
+    .status(201)
+    .cookie('jwt', token, {
+      expires: new Date(
+        Date.now() + env.jwt.COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
+      ),
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none'
+    })
+    .json({ status: 'success', token, data: { user: rest } })
 })
 
 export const signIn = catchAsync(async (req, res, next) => {
@@ -37,9 +50,21 @@ export const signIn = catchAsync(async (req, res, next) => {
     throw new ApiError(400, 'Incorrect email or password')
   }
 
+  const { password: pass, ...rest } = user._doc
+
   const token = signToken(user._id)
 
-  res.status(200).json({ status: 'success', token })
+  res
+    .status(200)
+    .cookie('jwt', token, {
+      expires: new Date(
+        Date.now() + env.jwt.COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
+      ),
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none'
+    })
+    .json({ status: 'success', token, data: { user: rest } })
 })
 
 export const forgotPassword = catchAsync(async (req, res, next) => {
@@ -60,7 +85,8 @@ export const forgotPassword = catchAsync(async (req, res, next) => {
     user.name,
     email,
     resetToken,
-    req.headers.origin
+    // req.headers.origin
+    'http://localhost:8000/api/users'
   )
 
   res.status(200).json({ status: 'success', resetToken })
@@ -87,7 +113,37 @@ export const resetPassword = catchAsync(async (req, res, next) => {
   user.passwordResetExpires = undefined
   await user.save()
 
+  const { password: pass, ...rest } = user._doc
+
   const token = signToken(user._id)
 
-  res.status(200).json({ status: 'success', token })
+  res.status(200).json({ status: 'success', token, data: { user: rest } })
+})
+
+export const updatePassword = catchAsync(async (req, res, next) => {
+  const user = await User.findById(req.user.id).select('+password')
+
+  if (!(await user.correctPassword(req.body.currentPassword))) {
+    throw new ApiError(401, 'Your current password is wrong')
+  }
+
+  user.password = req.body.password
+  user.passwordConfirm = req.body.passwordConfirm
+  await user.save()
+
+  const { password: pass, ...rest } = user._doc
+
+  const token = signToken(user._id)
+
+  res
+    .status(200)
+    .cookie('jwt', token, {
+      expires: new Date(
+        Date.now() + env.jwt.COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
+      ),
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none'
+    })
+    .json({ status: 'success', token, data: { user: rest } })
 })
