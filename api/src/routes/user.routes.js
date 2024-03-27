@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { signUp } from '~/controllers/auth.controller'
+import { signIn, signUp } from '~/controllers/auth.controller'
 import {
   getAllUsers,
   createUser,
@@ -12,6 +12,7 @@ const router = Router()
 
 // Auth routes
 router.route('/signup').post(signUp)
+router.route('/signin').post(signIn)
 
 // User routes
 router.route('/').get(getAllUsers).post(createUser)
