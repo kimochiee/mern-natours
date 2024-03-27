@@ -40,3 +40,44 @@ export const signIn = catchAsync(async (req, res, next) => {
 
   res.status(200).json({ status: 'success', token })
 })
+
+export const forgotPassword = catchAsync(async (req, res, next) => {
+  const user = await User.findOne({
+    email: req.body.email
+  })
+
+  if (!user) {
+    throw new ApiError(404, 'There is no user with that email address')
+  }
+
+  const resetToken = user.createPasswordResetToken()
+  await user.save({ validateBeforeSave: false })
+
+  res.status(200).json({ status: 'success', resetToken })
+})
+
+export const resetPassword = catchAsync(async (req, res, next) => {
+  const hashedToken = crypto
+    .createHash('sha256')
+    .update(req.params.token)
+    .digest('hex')
+
+  const user = await User.findOne({
+    passwordResetToken: hashedToken,
+    passwordResetExpires: { $gt: Date.now() }
+  })
+
+  if (!user) {
+    throw new ApiError(400, 'Token is invalid or has expired')
+  }
+
+  user.password = req.body.password
+  user.passwordConfirm = req.body.passwordConfirm
+  user.passwordResetToken = undefined
+  user.passwordResetExpires = undefined
+  await user.save()
+
+  const token = signToken(user._id)
+
+  res.status(200).json({ status: 'success', token })
+})
