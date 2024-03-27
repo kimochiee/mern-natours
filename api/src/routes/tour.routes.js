@@ -1,6 +1,4 @@
 import { Router } from 'express'
-const router = Router()
-
 import {
   aliasTopTours,
   getAllTours,
@@ -11,6 +9,8 @@ import {
   getTourStats,
   getMonthlyPlan
 } from '~/controllers/tour.controller'
+
+const router = Router()
 
 router.route('/top-5-cheap').get(aliasTopTours, getAllTours)
 router.route('/tour-stats').get(getTourStats)

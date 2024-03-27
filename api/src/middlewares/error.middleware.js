@@ -51,6 +51,10 @@ export const errorMiddleware = (err, req, res, next) => {
     if (err.name === 'CastError') error = handleCastErrorDB(err)
     if (err.code === 11000) error = handleDuplicateFieldsDB(err)
     if (err.name === 'ValidationError') error = new ApiError(400, err.message)
+    if (err.name === 'JsonWebTokenError')
+      error = new ApiError(401, 'Invalid token. Please log in again')
+    if (err.name === 'TokenExpiredError')
+      error = new ApiError(401, 'Token expired. Please log in again')
 
     sendProdError(error, res)
   }
