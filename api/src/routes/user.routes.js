@@ -1,6 +1,5 @@
 import { Router } from 'express'
-const router = Router()
-
+import { signUp } from '~/controllers/auth.controller'
 import {
   getAllUsers,
   createUser,
@@ -9,6 +8,12 @@ import {
   deleteUser
 } from '~/controllers/user.controller'
 
+const router = Router()
+
+// Auth routes
+router.route('/signup').post(signUp)
+
+// User routes
 router.route('/').get(getAllUsers).post(createUser)
 router.route('/:id').get(getUser).patch(updateUser).delete(deleteUser)
 
