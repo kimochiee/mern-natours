@@ -2,6 +2,7 @@ import { sign } from 'jsonwebtoken'
 import { env } from '~/config/env'
 import { User } from '~/models/user.model'
 import { ApiError } from '~/utils/ApiError'
+import Email from '~/utils/Email'
 import { catchAsync } from '~/utils/catchAsync'
 
 const signToken = (id) => {
@@ -42,8 +43,10 @@ export const signIn = catchAsync(async (req, res, next) => {
 })
 
 export const forgotPassword = catchAsync(async (req, res, next) => {
+  const { email } = req.body
+
   const user = await User.findOne({
-    email: req.body.email
+    email
   })
 
   if (!user) {
@@ -52,6 +55,13 @@ export const forgotPassword = catchAsync(async (req, res, next) => {
 
   const resetToken = user.createPasswordResetToken()
   await user.save({ validateBeforeSave: false })
+
+  await new Email().sendPasswordReset(
+    user.name,
+    email,
+    resetToken,
+    req.headers.origin
+  )
 
   res.status(200).json({ status: 'success', resetToken })
 })

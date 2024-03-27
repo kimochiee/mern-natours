@@ -1,5 +1,10 @@
 import { Router } from 'express'
-import { signIn, signUp } from '~/controllers/auth.controller'
+import {
+  forgotPassword,
+  resetPassword,
+  signIn,
+  signUp
+} from '~/controllers/auth.controller'
 import {
   getAllUsers,
   createUser,
@@ -13,6 +18,9 @@ const router = Router()
 // Auth routes
 router.route('/signup').post(signUp)
 router.route('/signin').post(signIn)
+
+router.route('/forgotPassword').post(forgotPassword)
+router.route('/resetPassword').post(resetPassword)
 
 // User routes
 router.route('/').get(getAllUsers).post(createUser)
