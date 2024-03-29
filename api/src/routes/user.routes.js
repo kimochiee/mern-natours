@@ -23,18 +23,19 @@ const router = Router()
 // Auth routes
 router.route('/signup').post(signUp)
 router.route('/signin').post(signIn)
-
 router.route('/forgotPassword').post(forgotPassword)
 router.route('/resetPassword/:token').patch(resetPassword)
 
-router.route('/updateMyPassword').patch(protect, updatePassword)
+router.use(protect)
+router.route('/updateMyPassword').patch(updatePassword)
 
 // Current user routes
-router.route('/me').get(protect, getMe, getUser)
-router.route('/updateMe').patch(protect, updateMe)
-router.route('/deleteMe').delete(protect, deleteMe)
+router.route('/me').get(getMe, getUser)
+router.route('/updateMe').patch(updateMe)
+router.route('/deleteMe').delete(deleteMe)
 
 // User routes
+router.use(restrictTo('admin'))
 router.route('/').get(getAllUsers).post(createUser)
 router.route('/:id').get(getUser).patch(updateUser).delete(deleteUser)
 
