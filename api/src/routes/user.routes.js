@@ -13,7 +13,8 @@ import {
   updateUser,
   deleteUser,
   updateMe,
-  deleteMe
+  deleteMe,
+  getMe
 } from '~/controllers/user.controller'
 import { protect, restrictTo } from '~/middlewares/auth.middleware'
 
@@ -28,12 +29,13 @@ router.route('/resetPassword/:token').patch(resetPassword)
 
 router.route('/updateMyPassword').patch(protect, updatePassword)
 
+// Current user routes
+router.route('/me').get(protect, getMe, getUser)
+router.route('/updateMe').patch(protect, updateMe)
+router.route('/deleteMe').delete(protect, deleteMe)
+
 // User routes
 router.route('/').get(getAllUsers).post(createUser)
 router.route('/:id').get(getUser).patch(updateUser).delete(deleteUser)
-
-// Current user routes
-router.route('/updateMe').patch(protect, updateMe)
-router.route('/deleteMe').delete(protect, deleteMe)
 
 export default router

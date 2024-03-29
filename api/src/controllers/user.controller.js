@@ -25,6 +25,12 @@ export const createUser = createOne(User)
 export const updateUser = updateOne(User)
 export const deleteUser = deleteOne(User)
 
+export const getMe = (req, res, next) => {
+  req.params.id = req.user.id
+
+  next()
+}
+
 export const updateMe = catchAsync(async (req, res, next) => {
   if (req.body.password || req.body.passwordConfirm) {
     throw new ApiError(400, 'This route is not for password updates')
