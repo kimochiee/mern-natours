@@ -7,7 +7,9 @@ import {
   updateTour,
   deleteTour,
   getTourStats,
-  getMonthlyPlan
+  getMonthlyPlan,
+  getToursWithin,
+  getTourDistances
 } from '~/controllers/tour.controller'
 import { protect, restrictTo } from '~/middlewares/auth.middleware'
 import reviewRouter from '~/routes/review.routes'
@@ -23,6 +25,11 @@ router.route('/tour-stats').get(getTourStats)
 router
   .route('/monthly-plan/:year')
   .get(protect, restrictTo('admin', 'lead-guide'), getMonthlyPlan)
+
+router
+  .route('/tours-within/:distance/center/:latlng/unit/:unit')
+  .get(getToursWithin)
+router.route('/distances/:latlng/unit/:unit').get(getTourDistances)
 
 router
   .route('/')
