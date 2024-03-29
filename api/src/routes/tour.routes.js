@@ -19,7 +19,7 @@ router
   .route('/monthly-plan/:year')
   .get(protect, restrictTo('admin'), getMonthlyPlan)
 
-router.route('/').get(getAllTours).post(protect, createTour)
+router.route('/').get(getAllTours).post(protect,restrictTo('admin'), createTour)
 router
   .route('/:id')
   .get(getTour)

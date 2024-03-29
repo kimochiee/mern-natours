@@ -3,10 +3,12 @@ const router = Router()
 
 import userRouter from './user.routes'
 import tourRouter from './tour.routes'
+import reviewRouter from './review.routes'
 import { ApiError } from '~/utils/ApiError'
 
 router.use('/users', userRouter)
 router.use('/tours', tourRouter)
+router.use('/reviews', reviewRouter)
 router.all('*', (req, res, next) =>
   next(new ApiError(404, `Can't find ${req.originalUrl} on this server!`))
 )
