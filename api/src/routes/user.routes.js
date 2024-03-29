@@ -15,7 +15,7 @@ import {
   updateMe,
   deleteMe
 } from '~/controllers/user.controller'
-import { protect } from '~/middlewares/auth.middleware'
+import { protect, restrictTo } from '~/middlewares/auth.middleware'
 
 const router = Router()
 
