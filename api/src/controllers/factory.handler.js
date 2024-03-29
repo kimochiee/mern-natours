@@ -4,7 +4,7 @@ import { catchAsync } from '~/utils/catchAsync'
 
 export const getAll = (model) => {
   return catchAsync(async (req, res, next) => {
-    const features = new ApiFeatures(model.find(), req.query)
+    const features = new ApiFeatures(model.find().lean(), req.query)
 
     const docs = await features.filter().sort().limitFields().paginate().query
 
