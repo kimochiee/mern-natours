@@ -2,7 +2,7 @@ function Header() {
   return (
     <header className="header">
       <nav className="nav nav--tours">
-        <a href="#" className="nav__el">All tours</a>
+        <a href="/" className="nav__el">All tours</a>
         <form className="nav__search">
           <button className="nav__search-btn">
             <svg>
