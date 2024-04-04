@@ -20,13 +20,13 @@ function Header() {
         <img src="img/logo-white.png" alt="Natours logo" />
       </div>
       <nav className="nav nav--user">
-        <a href="#" className="nav__el">My bookings</a>
+        {/* <a href="#" className="nav__el">My bookings</a>
         <a href="#" className="nav__el">
           <img src="img/users/default.jpg" alt="User photo" className="nav__user-img" />
           <span>Jonas</span>
-        </a>
-        {/* <button className="nav__el">Log in</button>
-        <button className="nav__el nav__el--cta">Sign up</button> */}
+        </a> */}
+        <a className="nav__el" href="/sign-in">Sign in</a>
+        <a className="nav__el nav__el--cta" href="/sign-up">Sign up</a>
       </nav>
     </header>
   )

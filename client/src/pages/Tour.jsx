@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
-import { setTitle } from "../utils/setTitle"
 import OverviewBox from "../components/Tour/OverviewBox"
 import { localeDate } from "../utils/localeDate"
 import ReviewCard from "../components/Tour/ReviewCard"
@@ -15,13 +14,10 @@ function Tour() {
     const fetchTour = async () => {
       try {
         setLoading(true)
-        setTitle('...')
         const response = await fetch(`http://localhost:8000/api/v1/tours/${tourId}`)
         const data = await response.json()
-        console.log(data.data.locations);
 
         setTour(data.data)
-        setTitle(data.data.name)
         setLoading(false)
       } catch (error) {
         console.log(error)
@@ -30,8 +26,6 @@ function Tour() {
 
     fetchTour()
   }, [tourId])
-
-
 
   if (loading) {
     return (

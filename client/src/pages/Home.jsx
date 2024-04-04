@@ -1,11 +1,8 @@
 import { useEffect, useState } from "react"
 
 import TourCard from "../components/TourCard"
-import { setTitle } from "../utils/setTitle"
 
 function Home() {
-  setTitle("Home")
-
   const [loading, setLoading] = useState(true)
   const [tours, setTours] = useState([])
 

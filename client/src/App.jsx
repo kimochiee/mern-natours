@@ -5,6 +5,8 @@ import Footer from './components/Footer'
 
 import Home from './pages/Home'
 import Tour from './pages/Tour'
+import Signin from './pages/Signin'
+import Signup from './pages/Signup'
 
 function App() {
   return (
@@ -12,6 +14,8 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/sign-in" element={<Signin />} />
+        <Route path="/sign-up" element={<Signup />} />
         <Route path="/tour/:tourId" element={<Tour />} />
       </Routes>
       <Footer />
