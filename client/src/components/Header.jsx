@@ -55,7 +55,7 @@ function Header() {
         {currentNatoursUser ? (
           <>
             <a className="nav__el nav__el-logout" onClick={handleLogOut}>Log Out</a>
-            <a href="#" className="nav__el">
+            <a href="/account" className="nav__el">
               <img src={`img/users/${currentNatoursUser.photo}`} alt="User photo" className="nav__user-img" />
               <span>{currentNatoursUser.name}</span>
             </a>
