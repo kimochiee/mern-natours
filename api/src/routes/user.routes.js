@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import {
   forgotPassword,
+  logOut,
   resetPassword,
   signIn,
   signUp,
@@ -23,6 +24,7 @@ const router = Router()
 // Auth routes
 router.route('/signup').post(signUp)
 router.route('/signin').post(signIn)
+router.route('/logout').post(logOut)
 router.route('/forgotPassword').post(forgotPassword)
 router.route('/resetPassword/:token').patch(resetPassword)
 

@@ -67,6 +67,12 @@ export const signIn = catchAsync(async (req, res, next) => {
     .json({ status: 'success', token, data: { user: rest } })
 })
 
+export const logOut = catchAsync(async (req, res, next) => {
+  res.clearCookie('jwt')
+
+  res.status(200).json({ status: 'success' })
+})
+
 export const forgotPassword = catchAsync(async (req, res, next) => {
   const { email } = req.body
 

@@ -27,7 +27,7 @@ function Signin() {
     try {
       dispatch(signInStart())
 
-      const response = await fetch('http://localhost:8000/api/v1/users/signin', {
+      const res = await fetch('http://localhost:8000/api/v1/users/signin', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -36,10 +36,9 @@ function Signin() {
         body: JSON.stringify(formData)
       })
 
-      const data = await response.json()
-      console.log(data)
+      const data = await res.json()
 
-      if (!response.ok) {
+      if (!res.ok) {
         notify(data.message, 'error')
         return dispatch(signInFailure(data.message))
       }
