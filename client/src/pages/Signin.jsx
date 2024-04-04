@@ -1,10 +1,14 @@
 import { useState } from "react"
+import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
+import { signInFailure, signInStart, signInSuccess } from "../redux/user/userSlice"
+import { notify } from "../utils/notify"
 
 function Signin() {
   const [formData, setFormData] = useState({})
-  const [loading, setLoading] = useState(false)
+  const { loading } = useSelector((state) => state.user)
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const handleChange = (e) => {
     setFormData({
@@ -16,15 +20,19 @@ function Signin() {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
+    if (!formData.email || !formData.password) {
+      return dispatch(signInFailure('Please fill all the fields'))
+    }
+
     try {
-      setLoading(true)
+      dispatch(signInStart())
 
       const response = await fetch('http://localhost:8000/api/v1/users/signin', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        // credentials: 'include',
+        credentials: 'include',
         body: JSON.stringify(formData)
       })
 
@@ -32,13 +40,17 @@ function Signin() {
       console.log(data)
 
       if (!response.ok) {
-        throw new Error(data.message)
+        notify(data.message, 'error')
+        return dispatch(signInFailure(data.message))
       }
 
-      setLoading(false)
-      navigate('/')
+      if (data.status === 'success') {
+        notify('Sign in successful', 'success')
+        dispatch(signInSuccess(data.data.user))
+        return navigate('/');
+      }
     } catch (error) {
-      setLoading(false)
+      dispatch(signInFailure(error.message))
       console.error(error.message)
     }
   }
@@ -73,7 +85,7 @@ function Signin() {
           </div>
           <div className="form__group">
             {loading ? (
-              <button className="btn btn--green">Loading...</button>
+              <button className="btn btn--green" disabled>Loading...</button>
             ) : (
               <button className="btn btn--green">Sign in</button>
             )}
