@@ -25,7 +25,7 @@ export const getOne = (model, populateOptions) => {
     const doc = await query
 
     if (!doc) {
-      return next(new ApiError(404, `No ${model} found with that ID`))
+      throw new ApiError(404, `No ${model} found with that ID`)
     }
 
     res.status(200).json({ status: 'success', data: doc })
@@ -48,7 +48,7 @@ export const updateOne = (model) => {
     })
 
     if (!doc) {
-      return next(new ApiError(404, `No ${model} found with that ID`))
+      throw new ApiError(404, `No ${model} found with that ID`)
     }
 
     res.status(200).json({ status: 'success', data: doc })
@@ -60,7 +60,7 @@ export const deleteOne = (model) => {
     const doc = await model.findByIdAndDelete(req.params.id)
 
     if (!doc) {
-      return next(new ApiError(404, `No ${model} found with that ID`))
+      throw new ApiError(404, `No ${model} found with that ID`)
     }
 
     res.status(204).json({ status: 'success', data: null })

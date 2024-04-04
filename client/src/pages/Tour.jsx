@@ -9,16 +9,25 @@ function Tour() {
   const { tourId } = useParams()
   const [loading, setLoading] = useState(true)
   const [tour, setTour] = useState(null)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     const fetchTour = async () => {
       try {
         setLoading(true)
-        const response = await fetch(`http://localhost:8000/api/v1/tours/${tourId}`)
-        const data = await response.json()
+        const res = await fetch(`http://localhost:8000/api/v1/tours/${tourId}`)
 
-        setTour(data.data)
-        setLoading(false)
+        const data = await res.json()
+
+        if (!res.ok) {
+          setError('No tour found with that ID')
+          setLoading(false)
+        }
+
+        if (data.status === 'success') {
+          setTour(data.data)
+          setLoading(false)
+        }
       } catch (error) {
         console.log(error)
       }
@@ -30,6 +39,20 @@ function Tour() {
   if (loading) {
     return (
       <div>Loading...</div>
+    )
+  }
+
+  if (error) {
+    return (
+      <main className="main">
+        <div className="error">
+          <div className="error__title">
+            <h2 className="heading-secondary heading-secondary--error">Uh oh! Something went wrong! </h2>
+            <h2 className="error__emoji">😢 🤯</h2>
+          </div>
+          <div className="error__msg">{error}</div>
+        </div>
+      </main>
     )
   }
 
