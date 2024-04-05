@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
-import OverviewBox from "../components/Tour/OverviewBox"
 import { localeDate } from "../utils/localeDate"
+
+import OverviewBox from "../components/Tour/OverviewBox"
 import ReviewCard from "../components/Tour/ReviewCard"
 import MapboxGlMap from "../components/Tour/MapboxGlMap"
+import Loader from "../components/Loader"
 
 function Tour() {
   const { tourId } = useParams()
@@ -38,7 +40,7 @@ function Tour() {
 
   if (loading) {
     return (
-      <div>Loading...</div>
+      <Loader />
     )
   }
 
@@ -89,7 +91,7 @@ function Tour() {
           <div>
             <div className="overview-box__group">
               <h2 className="heading-secondary ma-bt-lg">Quick facts</h2>
-              <OverviewBox label={'Next date'} text={localeDate(tour.startDates[0], 'en-us')} icon={'calendar'} />
+              <OverviewBox label='Next date' text={localeDate(tour.startDates[0], 'en-us')} icon='calendar' />
               <OverviewBox label={'Difficulty'} text={tour.difficulty} icon={'trending-up'} />
               <OverviewBox label={'Participants'} text={`${tour.maxGroupSize} people`} icon={'user'} />
               <OverviewBox label={'Rating'} text={`${tour.ratingsAverage} / 5`} icon={'star'} />

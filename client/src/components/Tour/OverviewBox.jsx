@@ -13,9 +13,9 @@ function OverviewBox({ label, text, icon }) {
 }
 
 OverviewBox.propTypes = {
-  label: PropTypes.object.isRequired,
-  text: PropTypes.object.isRequired,
-  icon: PropTypes.object.isRequired,
+  label: PropTypes.string.isRequired,
+  text: PropTypes.string.isRequired,
+  icon: PropTypes.string.isRequired,
 };
 
 export default OverviewBox

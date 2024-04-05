@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { localeDate } from '../utils/localeDate';
+import { Link } from 'react-router-dom';
 
 function TourCard({ tour }) {
   return (
@@ -59,7 +60,7 @@ function TourCard({ tour }) {
           <span className="card__footer-value">{tour.ratingsAverage}</span>
           <span className="card__footer-text"> rating ({tour.ratingsQuantity})</span>
         </p>
-        <a href={`/tour/${tour._id}`} className="btn btn--green btn--small">Details</a>
+        <Link to={`/tour/${tour._id}`} className="btn btn--green btn--small">Details</Link>
       </div>
     </div>
   )

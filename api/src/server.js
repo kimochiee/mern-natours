@@ -2,6 +2,7 @@ import express from 'express'
 const app = express()
 
 import cors from 'cors'
+import cookieParser from 'cookie-parser'
 
 import { env } from './config/env'
 import router from './routes'
@@ -13,6 +14,7 @@ app.use(cors(corsOptions))
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+app.use(cookieParser())
 app.use(express.static(`${__dirname}/public`))
 
 app.use('/api/v1', router)

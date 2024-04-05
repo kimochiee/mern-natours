@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { logOutSuccess } from "../redux/user/userSlice"
 import { notify } from "../utils/notify"
 
@@ -34,7 +34,7 @@ function Header() {
   return (
     <header className="header">
       <nav className="nav nav--tours">
-        <a href="/" className="nav__el">All tours</a>
+        <Link to="/" className="nav__el">All tours</Link>
         <form className="nav__search">
           <button className="nav__search-btn">
             <svg>
@@ -54,16 +54,16 @@ function Header() {
       <nav className="nav nav--user">
         {currentNatoursUser ? (
           <>
-            <a className="nav__el nav__el-logout" onClick={handleLogOut}>Log Out</a>
-            <a href="/account" className="nav__el">
+            <Link className="nav__el nav__el-logout" onClick={handleLogOut}>Log Out</Link>
+            <Link to="/account?tab=profile" className="nav__el">
               <img src={`img/users/${currentNatoursUser.photo}`} alt="User photo" className="nav__user-img" />
               <span>{currentNatoursUser.name}</span>
-            </a>
+            </Link>
           </>
         ) : (
           <>
-            <a className="nav__el" href="/sign-in">Sign in</a>
-            <a className="nav__el nav__el--cta" href="/sign-up">Sign up</a>
+            <Link className="nav__el" to="/sign-in">Sign in</Link>
+            <Link className="nav__el nav__el--cta" to="/sign-up">Sign up</Link>
           </>
         )}
       </nav>

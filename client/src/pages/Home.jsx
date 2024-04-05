@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 
 import TourCard from "../components/TourCard"
+import Loader from "../components/Loader"
 
 function Home() {
   const [loading, setLoading] = useState(true)
@@ -26,11 +27,7 @@ function Home() {
 
   if (loading) {
     return (
-      <main className="main">
-        <div className="card-container">
-          <h1>Loading...</h1>
-        </div>
-      </main>
+      <Loader />
     );
   }
 

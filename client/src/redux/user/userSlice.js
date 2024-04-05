@@ -29,11 +29,46 @@ export const userSlice = createSlice({
       state.currentNatoursUser = null
       state.loading = false
       state.error = null
+    },
+    updateUserDataStart: (state) => {
+      state.loading = true
+      state.error = null
+    },
+    updateUserDataSuccess: (state, action) => {
+      state.currentNatoursUser = action.payload
+      state.loading = false
+      state.error = null
+    },
+    updateUserDataFailure: (state, action) => {
+      state.loading = false
+      state.error = action.payload
+    },
+    updateUserPasswordStart: (state) => {
+      state.loading = true
+      state.error = null
+    },
+    updateUserPasswordSuccess: (state) => {
+      state.loading = false
+      state.error = null
+    },
+    updateUserPasswordFailure: (state, action) => {
+      state.loading = false
+      state.error = action.payload
     }
   }
 })
 
-export const { signInStart, signInSuccess, signInFailure, logOutSuccess } =
-  userSlice.actions
+export const {
+  signInStart,
+  signInSuccess,
+  signInFailure,
+  logOutSuccess,
+  updateUserDataStart,
+  updateUserDataSuccess,
+  updateUserDataFailure,
+  updateUserPasswordStart,
+  updateUserPasswordSuccess,
+  updateUserPasswordFailure
+} = userSlice.actions
 
 export default userSlice.reducer

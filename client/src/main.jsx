@@ -13,8 +13,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <App />
       <ToastContainer
         toastStyle={{ fontSize: "1.4rem" }}
-        position="bottom-left"
-        autoClose={1000}
+        position="bottom-right"
+        autoClose={2000}
         pauseOnHover={false}
       />
     </Provider>

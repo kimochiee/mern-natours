@@ -48,6 +48,7 @@ function MapboxGlMap({ data }) {
       }
     })
 
+    window.scrollTo(0, 0)
     return () => map.remove();
   }, []);
 
@@ -58,7 +59,7 @@ function MapboxGlMap({ data }) {
 }
 
 MapboxGlMap.propTypes = {
-  data: PropTypes.object.isRequired,
+  data: PropTypes.array.isRequired,
 };
 
 export default MapboxGlMap
