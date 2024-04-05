@@ -13,10 +13,17 @@ function UserProfile() {
   const dispatch = useDispatch()
 
   const handleChangeUserData = (e) => {
-    setUserData({
-      ...userData,
-      [e.target.name]: e.target.value.trim()
-    })
+    if (e.target.name === 'photo') {
+      setUserData({
+        ...userData,
+        photo: e.target.files[0]
+      })
+    } else {
+      setUserData({
+        ...userData,
+        [e.target.name]: e.target.value.trim()
+      })
+    }
   }
 
   const handleChangeUserPassword = (e) => {
@@ -29,34 +36,22 @@ function UserProfile() {
   const handleSubmitUserData = async (e) => {
     e.preventDefault()
 
-    if (userData.name === currentNatoursUser.name && userData.email === currentNatoursUser.email) {
+    if (userData.name === currentNatoursUser.name && userData.email === currentNatoursUser.email && !userData.photo) {
       return
     }
 
     try {
       dispatch(updateUserDataStart())
 
-      // const formData = new FormData()
-      // formData.append('name', userData.name)
-      // formData.append('email', userData.email)
-      // formData.append('photo', e.target.photo.files[0])
-
-      // const res = await fetch('http://localhost:8000/api/v1/users/updateMe', {
-      //   method: 'PATCH',
-      //   headers: {
-      //     'Content-Type': 'multipart/form-data'
-      //   },
-      //   credentials: 'include',
-      //   body: formData
-      // })
+      const formData = new FormData()
+      formData.append('name', userData.name)
+      formData.append('email', userData.email)
+      formData.append('photo', userData.photo)
 
       const res = await fetch('http://localhost:8000/api/v1/users/updateMe', {
         method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json'
-        },
         credentials: 'include',
-        body: JSON.stringify(userData)
+        body: formData
       })
 
       const data = await res.json()
@@ -139,13 +134,18 @@ function UserProfile() {
             />
           </div>
           <div className='form__group form__photo-upload'>
-            <img src={`img/users/${currentNatoursUser.photo}`} alt='User photo' className='form__user-photo' />
+            <img
+              src={currentNatoursUser.photo.startsWith('http') ? currentNatoursUser.photo : `img/users/${currentNatoursUser.photo}`}
+              alt='User photo'
+              className='form__user-photo'
+            />
             <input
               type='file'
               id='photo'
               name='photo'
               className='form__upload'
               accept='image/*'
+              onChange={handleChangeUserData}
             />
             <label htmlFor='photo'>choose new photo</label>
           </div>

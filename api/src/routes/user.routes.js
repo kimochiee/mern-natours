@@ -18,6 +18,7 @@ import {
   getMe
 } from '~/controllers/user.controller'
 import { protect, restrictTo } from '~/middlewares/auth.middleware'
+import { upload } from '~/utils/cloudinary'
 
 const router = Router()
 
@@ -33,7 +34,7 @@ router.route('/updateMyPassword').patch(updatePassword)
 
 // Current user routes
 router.route('/me').get(getMe, getUser)
-router.route('/updateMe').patch(updateMe)
+router.route('/updateMe').patch(upload.single('photo'), updateMe)
 router.route('/deleteMe').delete(deleteMe)
 
 // User routes

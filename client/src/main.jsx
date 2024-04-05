@@ -14,7 +14,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <ToastContainer
         toastStyle={{ fontSize: "1.4rem" }}
         position="bottom-right"
-        autoClose={2000}
+        autoClose={1500}
         pauseOnHover={false}
       />
     </Provider>

@@ -19,6 +19,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: 'default.jpg'
   },
+  photo_publicId: {
+    type: String,
+    default: ''
+  },
   password: {
     type: String,
     required: [true, 'Password is required'],

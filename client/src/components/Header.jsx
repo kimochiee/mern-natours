@@ -8,6 +8,8 @@ function Header() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
+  console.log(currentNatoursUser);
+
   const handleLogOut = async () => {
     try {
       const res = await fetch('http://localhost:8000/api/v1/users/logout', {
@@ -56,7 +58,11 @@ function Header() {
           <>
             <Link className='nav__el nav__el-logout' onClick={handleLogOut}>Log Out</Link>
             <Link to='/account?tab=profile' className='nav__el'>
-              <img src={`img/users/${currentNatoursUser.photo}`} alt='User photo' className='nav__user-img' />
+              <img
+                src={currentNatoursUser.photo.startsWith('http') ? currentNatoursUser.photo : `img/users/${currentNatoursUser.photo}`}
+                alt='User photo'
+                className='nav__user-img'
+              />
               <span>{currentNatoursUser.name}</span>
             </Link>
           </>

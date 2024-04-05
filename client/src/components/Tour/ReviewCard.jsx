@@ -5,7 +5,8 @@ function ReviewCard({ review }) {
     <div className='reviews__card'>
       <div className='reviews__avatar'>
         <img
-          src={`img/users/${review.user.photo}`}
+          // src={`img/users/${review.user.photo}`}
+          src={review.user.photo.startsWith('http') ? review.user.photo : `img/users/${review.user.photo}`}
           alt={review.user.name}
           className='reviews__avatar-img'
         />
