@@ -1,8 +1,8 @@
-import { useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
-import { useNavigate } from "react-router-dom"
-import { signInFailure, signInStart, signInSuccess } from "../redux/user/userSlice"
-import { notify } from "../utils/notify"
+import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { signInFailure, signInStart, signInSuccess } from '../redux/user/userSlice'
+import { notify } from '../utils/notify'
 
 function Signin() {
   const [formData, setFormData] = useState({})
@@ -55,38 +55,38 @@ function Signin() {
   }
 
   return (
-    <main className="main">
-      <div className="login-form">
-        <h2 className="heading-secondary ma-bt-lg">Sign into your account</h2>
-        <form className="form form--login" onSubmit={handleSubmit}>
-          <div className="form__group">
-            <label className="form__label" htmlFor="email">Email address</label>
+    <main className='main'>
+      <div className='login-form'>
+        <h2 className='heading-secondary ma-bt-lg'>Sign into your account</h2>
+        <form className='form form--login' onSubmit={handleSubmit}>
+          <div className='form__group'>
+            <label className='form__label' htmlFor='email'>Email address</label>
             <input
-              className="form__input"
-              name="email"
-              type="email"
-              placeholder="you@example.com"
-              required="required"
+              className='form__input'
+              name='email'
+              type='email'
+              placeholder='you@example.com'
+              required='required'
               onChange={handleChange}
             />
           </div>
-          <div className="form__group ma-bt-md">
-            <label className="form__label" htmlFor="password">Password</label>
+          <div className='form__group ma-bt-md'>
+            <label className='form__label' htmlFor='password'>Password</label>
             <input
-              className="form__input"
-              name="password"
-              type="password"
-              placeholder="••••••••"
-              required="required"
-              minLength="8"
+              className='form__input'
+              name='password'
+              type='password'
+              placeholder='••••••••'
+              required='required'
+              minLength='8'
               onChange={handleChange}
             />
           </div>
-          <div className="form__group">
+          <div className='form__group'>
             {loading ? (
-              <button className="btn btn--green" disabled>Loading...</button>
+              <button className='btn btn--green' disabled>Loading...</button>
             ) : (
-              <button className="btn btn--green">Sign in</button>
+              <button className='btn btn--green'>Sign in</button>
             )}
           </div>
         </form>

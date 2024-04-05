@@ -110,102 +110,102 @@ function UserProfile() {
   }
 
   return (
-    <div className="user-view__content">
-      <div className="user-view__form-container">
-        <h2 className="heading-secondary ma-bt-md">Your account settings</h2>
-        <form className="form form-user-data" onSubmit={handleSubmitUserData}>
-          <div className="form__group">
-            <label htmlFor="name" className="form__label">Name</label>
+    <div className='user-view__content'>
+      <div className='user-view__form-container'>
+        <h2 className='heading-secondary ma-bt-md'>Your account settings</h2>
+        <form className='form form-user-data' onSubmit={handleSubmitUserData}>
+          <div className='form__group'>
+            <label htmlFor='name' className='form__label'>Name</label>
             <input
-              type="text"
-              id="name"
-              name="name"
-              className="form__input"
+              type='text'
+              id='name'
+              name='name'
+              className='form__input'
               defaultValue={currentNatoursUser.name}
               required
               onChange={handleChangeUserData}
             />
           </div>
-          <div className="form__group">
-            <label htmlFor="email" className="form__label">Email</label>
+          <div className='form__group'>
+            <label htmlFor='email' className='form__label'>Email</label>
             <input
-              type="email"
-              id="email"
-              name="email"
-              className="form__input"
+              type='email'
+              id='email'
+              name='email'
+              className='form__input'
               defaultValue={currentNatoursUser.email}
               required
               onChange={handleChangeUserData}
             />
           </div>
-          <div className="form__group form__photo-upload">
-            <img src={`img/users/${currentNatoursUser.photo}`} alt="User photo" className="form__user-photo" />
+          <div className='form__group form__photo-upload'>
+            <img src={`img/users/${currentNatoursUser.photo}`} alt='User photo' className='form__user-photo' />
             <input
-              type="file"
-              id="photo"
-              name="photo"
-              className="form__upload"
-              accept="image/*"
+              type='file'
+              id='photo'
+              name='photo'
+              className='form__upload'
+              accept='image/*'
             />
-            <label htmlFor="photo">choose new photo</label>
+            <label htmlFor='photo'>choose new photo</label>
           </div>
-          <div className="form__group right">
+          <div className='form__group right'>
             {loading ?
-              <button className="btn btn--small btn--green" disabled>Saving...</button>
+              <button className='btn btn--small btn--green' disabled>Saving...</button>
               :
-              <button className="btn btn--small btn--green">Save settings</button>
+              <button className='btn btn--small btn--green'>Save settings</button>
             }
           </div>
         </form>
       </div>
-      <div className="line">&nbsp;</div>
-      <div className="user-view__form-container">
-        <h2 className="heading-secondary ma-bt-md">Password change</h2>
-        <form className="form form-user-data" onSubmit={handleSubmitUserPassword}>
-          <div className="form__group">
-            <label htmlFor="currentPassword" className="form__label">Current password</label>
+      <div className='line'>&nbsp;</div>
+      <div className='user-view__form-container'>
+        <h2 className='heading-secondary ma-bt-md'>Password change</h2>
+        <form className='form form-user-data' onSubmit={handleSubmitUserPassword}>
+          <div className='form__group'>
+            <label htmlFor='currentPassword' className='form__label'>Current password</label>
             <input
-              type="password"
-              id="currentPassword"
-              name="currentPassword"
-              className="form__input"
-              placeholder="********"
+              type='password'
+              id='currentPassword'
+              name='currentPassword'
+              className='form__input'
+              placeholder='********'
               minLength={8}
               required
               onChange={handleChangeUserPassword}
             />
           </div>
-          <div className="form__group">
-            <label htmlFor="password" className="form__label">New password</label>
+          <div className='form__group'>
+            <label htmlFor='password' className='form__label'>New password</label>
             <input
-              type="password"
-              id="password"
-              name="password"
-              className="form__input"
-              placeholder="********"
+              type='password'
+              id='password'
+              name='password'
+              className='form__input'
+              placeholder='********'
               minLength={8}
               required
               onChange={handleChangeUserPassword}
             />
           </div>
-          <div className="form__group .ma-bt-lg">
-            <label htmlFor="passwordConfirm" className="form__label">Confirm password</label>
+          <div className='form__group .ma-bt-lg'>
+            <label htmlFor='passwordConfirm' className='form__label'>Confirm password</label>
             <input
-              type="password"
-              id="passwordConfirm"
-              name="passwordConfirm"
-              className="form__input"
-              placeholder="********"
+              type='password'
+              id='passwordConfirm'
+              name='passwordConfirm'
+              className='form__input'
+              placeholder='********'
               minLength={8}
               required
               onChange={handleChangeUserPassword}
             />
           </div>
-          <div className="form__group right">
+          <div className='form__group right'>
             {loading ?
-              <button className="btn btn--small btn--green" disabled>Saving...</button>
+              <button className='btn btn--small btn--green' disabled>Saving...</button>
               :
-              <button className="btn btn--small btn--green">Save password</button>
+              <button className='btn btn--small btn--green'>Save password</button>
             }
           </div>
         </form>

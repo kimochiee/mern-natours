@@ -54,7 +54,7 @@ function MapboxGlMap({ data }) {
 
 
   return (
-    <div id="map" ref={mapContainer} />
+    <div id='map' ref={mapContainer} />
   )
 }
 
