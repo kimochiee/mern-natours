@@ -8,8 +8,6 @@ function Header() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  console.log(currentNatoursUser);
-
   const handleLogOut = async () => {
     try {
       const res = await fetch('http://localhost:8000/api/v1/users/logout', {

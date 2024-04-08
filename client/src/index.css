@@ -204,6 +204,22 @@ html {
   cursor: pointer;
 }
 
+.btn-secondary {
+  display: inline-block;
+  font-weight: 700;
+  font-size: 1.6rem;
+  font-family: inherit;
+  background-color: #fff;
+  color: #55c57a;
+  padding: 3px;
+  text-decoration: none;
+  border: none;
+  border-bottom: 1px solid #55c57a;
+  -webkit-transition: all 0.2s;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
 .btn:hover {
   -webkit-transform: translateY(-3px);
   transform: translateY(-3px);
@@ -1342,6 +1358,10 @@ html {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

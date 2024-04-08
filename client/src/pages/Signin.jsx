@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { signInFailure, signInStart, signInSuccess } from '../redux/user/userSlice'
 import { notify } from '../utils/notify'
 
@@ -89,9 +89,18 @@ function Signin() {
               <button className='btn btn--green'>Sign in</button>
             )}
           </div>
+          <div className='form__group' style={{
+            fontSize: '1.6rem',
+            textAlign: 'center'
+          }}>
+            <span>
+              Forgot your password?
+              <Link to='/forgot-password' className='btn-secondary'> Click Here!</Link>
+            </span>
+          </div>
         </form>
-      </div>
-    </main>
+      </div >
+    </main >
   )
 }
 

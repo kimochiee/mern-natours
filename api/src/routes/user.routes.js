@@ -27,7 +27,7 @@ router.route('/signup').post(signUp)
 router.route('/signin').post(signIn)
 router.route('/logout').post(logOut)
 router.route('/forgotPassword').post(forgotPassword)
-router.route('/resetPassword/:token').patch(resetPassword)
+router.route('/resetPassword').patch(resetPassword)
 
 router.use(protect)
 router.route('/updateMyPassword').patch(updatePassword)

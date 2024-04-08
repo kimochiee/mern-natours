@@ -76,9 +76,7 @@ export const logOut = catchAsync(async (req, res, next) => {
 export const forgotPassword = catchAsync(async (req, res, next) => {
   const { email } = req.body
 
-  const user = await User.findOne({
-    email
-  })
+  const user = await User.findOne({ email })
 
   if (!user) {
     throw new ApiError(404, 'There is no user with that email address')
@@ -91,8 +89,7 @@ export const forgotPassword = catchAsync(async (req, res, next) => {
     user.name,
     email,
     resetToken,
-    // req.headers.origin
-    'http://localhost:8000/api/users'
+    req.headers.origin
   )
 
   res.status(200).json({ status: 'success', resetToken })
@@ -101,10 +98,11 @@ export const forgotPassword = catchAsync(async (req, res, next) => {
 export const resetPassword = catchAsync(async (req, res, next) => {
   const hashedToken = crypto
     .createHash('sha256')
-    .update(req.params.token)
+    .update(req.body.token)
     .digest('hex')
 
   const user = await User.findOne({
+    email: req.body.email,
     passwordResetToken: hashedToken,
     passwordResetExpires: { $gt: Date.now() }
   })
@@ -121,9 +119,7 @@ export const resetPassword = catchAsync(async (req, res, next) => {
 
   const { password: pass, ...rest } = user._doc
 
-  const token = signToken(user._id)
-
-  res.status(200).json({ status: 'success', token, data: { user: rest } })
+  res.status(200).json({ status: 'success', data: { user: rest } })
 })
 
 export const updatePassword = catchAsync(async (req, res, next) => {
