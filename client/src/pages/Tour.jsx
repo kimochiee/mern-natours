@@ -1,17 +1,48 @@
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { localeDate } from '../utils/localeDate'
+import { useSelector } from 'react-redux'
 
 import OverviewBox from '../components/Tour/OverviewBox'
 import ReviewCard from '../components/Tour/ReviewCard'
 import MapboxGlMap from '../components/Tour/MapboxGlMap'
 import Loader from '../components/Loader'
+import { notify } from '../utils/notify'
 
 function Tour() {
+  const { currentNatoursUser } = useSelector((state) => state.user)
   const { tourId } = useParams()
+  const [processing, setProcessing] = useState(false)
   const [loading, setLoading] = useState(true)
   const [tour, setTour] = useState(null)
   const [error, setError] = useState(null)
+
+  const handleBookTour = async () => {
+    try {
+      setProcessing(true)
+
+      const res = await fetch(`http://localhost:8000/api/v1/bookings/checkout-session/${tourId}`, {
+        credentials: 'include'
+      })
+
+      const data = await res.json()
+
+      if (!res.ok) {
+        setProcessing(false)
+        return notify(data.message, 'error')
+      }
+
+      if (data.status === 'success') {
+        setProcessing(false)
+
+        return window.location.replace(data.session.url)
+      }
+    } catch (error) {
+      setProcessing(false)
+      notify(error.message, 'error')
+      console.log(error)
+    }
+  }
 
   useEffect(() => {
     const fetchTour = async () => {
@@ -161,7 +192,14 @@ function Tour() {
             <p className='cta__text'>
               {tour.duration} days. 1 adventure. Infinite memories. Make it yours today!
             </p>
-            <button className='btn btn--green span-all-rows'>Book tour now!</button>
+            {
+              currentNatoursUser ?
+                <button className='btn btn--green span-all-rows' onClick={handleBookTour}>
+                  {processing ? 'Processing...' : 'Book tour now!'}
+                </button>
+                :
+                <Link to='/sign-in' className='btn btn--green span-all-rows'>Log in to book tour</Link>
+            }
           </div>
         </div>
       </section>
