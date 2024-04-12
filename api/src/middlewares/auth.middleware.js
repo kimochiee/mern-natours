@@ -5,14 +5,16 @@ import { ApiError } from '~/utils/ApiError'
 import { catchAsync } from '~/utils/catchAsync'
 
 export const protect = catchAsync(async (req, res, next) => {
-  let token = req.cookies.jwt
+  let token
 
-  // if (
-  //   req.headers.authorization &&
-  //   req.headers.authorization.startsWith('Bearer')
-  // ) {
-  //   token = req.headers.authorization.split(' ')[1]
-  // }
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith('Bearer')
+  ) {
+    token = req.headers.authorization.split(' ')[1]
+  } else {
+    token = req.cookies.jwt
+  }
 
   if (!token) {
     throw new ApiError(401, 'You are not logged in')

@@ -13,6 +13,7 @@ import Error from './pages/Error'
 import Account from './pages/Account'
 import ForgotPassword from './pages/ForgotPassword'
 import ResetPassword from './pages/ResetPassword'
+import Success from './pages/Success'
 
 function App() {
   const { currentnatoursUser } = useSelector((state) => state.user)
@@ -28,6 +29,9 @@ function App() {
         <Route path='/reset-password' element={currentnatoursUser ? <Navigate to='/' /> : <ResetPassword />} />
         <Route element={<PrivateRoute />}>
           <Route path='/account' element={<Account />} />
+        </Route>
+        <Route element={<PrivateRoute />}>
+          <Route path='/success' element={<Success />} />
         </Route>
         <Route path='/tour/:tourId' element={<Tour />} />
         <Route path='*' element={<Error />} />

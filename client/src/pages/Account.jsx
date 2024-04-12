@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom'
 
 import SideNav from '../components/User/SideNav';
 import UserProfile from '../components/Manage/UserProfile';
+import MyTours from '../components/Manage/MyTours';
 
 function Account() {
   const location = useLocation()
@@ -23,6 +24,7 @@ function Account() {
         <SideNav />
 
         {tab === 'profile' && <UserProfile />}
+        {tab === 'my-tours' && <MyTours />}
       </div>
     </main>
   )

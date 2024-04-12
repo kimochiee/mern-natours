@@ -10,6 +10,7 @@ import {
   updateOne
 } from './factory.handler'
 import { Booking } from '~/models/booking.model'
+import { ApiError } from '~/utils/ApiError'
 
 const stripe = new Stripe(env.stripe.SECRET_KEY)
 
@@ -20,10 +21,13 @@ export const getCheckoutSession = catchAsync(async (req, res, next) => {
   // 2) create checkout session
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card'],
-    success_url: `${req.headers.origin}/account?tab=my-tours?alert=booking`,
+    // success_url: `${req.headers.origin}/account?tab=my-tours`,
+    // success_url: `${req.headers.origin}/success?tour=${tour._id}&user=${req.user._id}&price=${tour.price}`,
+    success_url: `${req.headers.origin}/success?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${req.headers.origin}/tour/${tour._id}`,
     customer_email: req.user.email,
-    client_reference_id: req.params.tourId,
+    client_reference_id:
+      req.params.tourId + ' ' + req.user._id + ' ' + tour.price,
     line_items: [
       {
         price_data: {
@@ -31,7 +35,13 @@ export const getCheckoutSession = catchAsync(async (req, res, next) => {
           currency: 'usd',
           product_data: {
             name: `${tour.name} Tour`,
-            images: [`https://www.natours.dev/img/tours/${tour.imageCover}`],
+            images: [
+              tour.imageCover.startsWith('http')
+                ? tour.imageCover
+                : `${req.protocol}://${req.get('host')}/img/tours/${
+                    tour.imageCover
+                  }`
+            ],
             description: tour.summary
           }
         },
@@ -48,7 +58,38 @@ export const getCheckoutSession = catchAsync(async (req, res, next) => {
   })
 })
 
-export const createBookingCheckout = catchAsync(async (req, res, next) => {})
+export const createBookingCheckout = catchAsync(async (req, res, next) => {
+  const session = await stripe.checkout.sessions.retrieve(req.body.session_id)
+
+  const bookingData = {
+    tour: session.client_reference_id.split(' ')[0],
+    user: session.client_reference_id.split(' ')[1],
+    price: session.client_reference_id.split(' ')[2]
+  }
+
+  const existingBooking = await Booking.findOne(bookingData)
+
+  if (existingBooking) {
+    throw new ApiError(400, 'Booking already exists.')
+  }
+
+  const booking = await Booking.create(bookingData)
+
+  if (!booking) {
+    throw new ApiError(400, 'Booking failed.')
+  }
+
+  res.status(200).json({ status: 'success', session })
+})
+
+export const getMyBookings = catchAsync(async (req, res, next) => {
+  const bookings = await Booking.find({ user: req.user._id })
+
+  const tourIds = bookings.map((booking) => booking.tour)
+  const tours = await Tour.find({ _id: { $in: tourIds } })
+
+  res.status(200).json({ status: 'success', data: { tours } })
+})
 
 export const createBooking = createOne(Booking)
 export const getBooking = getOne(Booking)

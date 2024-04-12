@@ -2,6 +2,8 @@ import { env } from '~/config/env'
 import { ApiError } from '~/utils/ApiError'
 
 const sendErrorDev = (err, res) => {
+  console.log('error dev: ', err)
+
   res.status(err.statusCode).json({
     status: err.status,
     message: err.message,
@@ -17,7 +19,7 @@ const sendProdError = (err, res) => {
       message: err.message
     })
   } else {
-    console.error(err)
+    console.error('err prod: ', err)
 
     res.status(500).json({
       status: 'error',

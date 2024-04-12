@@ -18,7 +18,7 @@ const bookingSchema = new mongoose.Schema(
     },
     paid: {
       type: Boolean,
-      default: [true, 'Booking must be paid for']
+      default: true
     }
   },
   {
