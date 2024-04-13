@@ -7,10 +7,15 @@ export const getAll = (model) => {
     const features = new ApiFeatures(model.find().lean(), req.query)
 
     const docs = await features.filter().sort().limitFields().paginate().query
+    const totalDocs = await model.countDocuments()
 
-    res
-      .status(200)
-      .json({ status: 'success', results: docs.length, data: docs })
+    res.status(200).json({
+      status: 'success',
+      totalDocs,
+      maxDocs: 6,
+      results: docs.length,
+      data: docs
+    })
   })
 }
 
