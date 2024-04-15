@@ -11,6 +11,7 @@ import {
 } from './factory.handler'
 import { Booking } from '~/models/booking.model'
 import { ApiError } from '~/utils/ApiError'
+import { ApiFeatures } from '~/utils/ApiFeatures'
 
 const stripe = new Stripe(env.stripe.SECRET_KEY)
 
@@ -64,7 +65,8 @@ export const createBookingCheckout = catchAsync(async (req, res, next) => {
   const bookingData = {
     tour: session.client_reference_id.split(' ')[0],
     user: session.client_reference_id.split(' ')[1],
-    price: session.client_reference_id.split(' ')[2]
+    price: session.client_reference_id.split(' ')[2],
+    payment_intent: session.payment_intent
   }
 
   const existingBooking = await Booking.findOne(bookingData)
@@ -83,12 +85,34 @@ export const createBookingCheckout = catchAsync(async (req, res, next) => {
 })
 
 export const getMyBookings = catchAsync(async (req, res, next) => {
-  const bookings = await Booking.find({ user: req.user._id })
+  const features = new ApiFeatures(
+    Booking.find({ user: req.user._id }).lean(),
+    req.query
+  )
 
-  const tourIds = bookings.map((booking) => booking.tour)
-  const tours = await Tour.find({ _id: { $in: tourIds } })
+  const docs = await features.filter().sort().limitFields().paginate().query
+  const totalDocs = await Booking.countDocuments({ user: req.user._id })
 
-  res.status(200).json({ status: 'success', data: { tours } })
+  res.status(200).json({
+    status: 'success',
+    totalDocs,
+    maxDocs: 6,
+    data: { bookings: docs }
+  })
+})
+
+export const refundBooking = catchAsync(async (req, res, next) => {
+  const booking = await Booking.findByIdAndDelete(req.params.bookingId)
+
+  if (!booking) {
+    throw new ApiError(404, 'No booking found with that ID')
+  }
+
+  const session = await stripe.refunds.create({
+    payment_intent: booking.payment_intent
+  })
+
+  res.status(200).json({ status: 'success', session })
 })
 
 export const createBooking = createOne(Booking)

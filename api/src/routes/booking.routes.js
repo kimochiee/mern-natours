@@ -7,6 +7,7 @@ import {
   getBooking,
   getCheckoutSession,
   getMyBookings,
+  refundBooking,
   updateBooking
 } from '~/controllers/booking.controller'
 import { protect, restrictTo } from '~/middlewares/auth.middleware'
@@ -20,6 +21,7 @@ router.route('/checkout-session/:tourId').get(getCheckoutSession)
 // current user bookings
 router.route('/myBookings').get(getMyBookings)
 router.route('/createBookingCheckout').post(createBookingCheckout)
+router.route('/refund/:bookingId').delete(refundBooking)
 
 // crud bookings
 router.use(restrictTo('admin', 'lead-guide'))

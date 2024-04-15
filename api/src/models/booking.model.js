@@ -19,7 +19,8 @@ const bookingSchema = new mongoose.Schema(
     paid: {
       type: Boolean,
       default: true
-    }
+    },
+    payment_intent: String
   },
   {
     timestamps: true,
@@ -38,7 +39,7 @@ bookingSchema.pre(/^find/, function (next) {
     select: 'name email'
   }).populate({
     path: 'tour',
-    select: 'name'
+    select: 'name imageCover'
   })
 
   next()

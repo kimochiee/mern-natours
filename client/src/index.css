@@ -1470,3 +1470,110 @@ html {
 .btn-hidden {
   visibility: hidden;
 }
+
+.user-view__content {
+  -webkit-box-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  padding-bottom: 5rem;
+}
+
+.user-view__inner-container {
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 0 8rem;
+  min-height: 55rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.sub-heading {
+  font-size: 1.6rem;
+}
+.ma-bt-md {
+  margin-bottom: 3rem !important;
+}
+
+.review_tour_details {
+  display: flex;
+  gap: 2rem;
+}
+
+.line-small {
+  margin: 3rem 0 !important;
+}
+
+.review_tour_image {
+  width: 14rem;
+  height: 9rem;
+  border-radius: 5px;
+  margin-bottom: 2.5rem;
+}
+
+.review_tour_description h3 {
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.review_tour_description p {
+  font-size: 1.4rem;
+}
+
+.ma-bt-sm {
+  margin-bottom: 1.5rem !important;
+}
+
+.booking-price {
+  font-weight: 700;
+  font-size: 1.5rem !important;
+}
+
+.review_links {
+  text-align: center;
+  margin-left: auto;
+  width: 12rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.btn-secondary {
+  display: inline-block;
+  font-weight: 700;
+  font-size: 1.6rem;
+  font-family: inherit;
+  background-color: #fff;
+  color: #55c57a;
+  padding: 3px;
+  text-decoration: none;
+  border: none;
+  border-bottom: 1px solid #55c57a;
+  -webkit-transition: all .2s;
+  transition: all .2s;
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background-color: #55c57a;
+  color: #fff;
+}
+
+.review_tour_link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.booking_paid {
+  background-color: #55c57a;
+}
+
+.booking_status {
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.2rem;
+  margin-left: 1rem;
+  text-transform: uppercase;
+  padding: .5rem 1.5rem;
+  border-radius: 5rem;
+}
