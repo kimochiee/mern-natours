@@ -15,7 +15,8 @@ import {
   deleteUser,
   updateMe,
   deleteMe,
-  getMe
+  getMe,
+  deactivateMe
 } from '~/controllers/user.controller'
 import { protect, restrictTo } from '~/middlewares/auth.middleware'
 import { upload } from '~/utils/cloudinary'
@@ -35,6 +36,7 @@ router.route('/updateMyPassword').patch(updatePassword)
 // Current user routes
 router.route('/me').get(getMe, getUser)
 router.route('/updateMe').patch(upload.single('photo'), updateMe)
+router.route('/deactivateMe').patch(deactivateMe)
 router.route('/deleteMe').delete(deleteMe)
 
 // User routes

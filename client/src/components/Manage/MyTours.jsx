@@ -37,7 +37,7 @@ function MyTours() {
       try {
         setLoading(true)
 
-        const res = await fetch(`http://localhost:8000/api/v1/bookings/myBookings`, {
+        const res = await fetch(`http://localhost:8000/api/v1/bookings/myBookings?page=${page}`, {
           method: 'GET',
           credentials: 'include'
         })
@@ -49,7 +49,7 @@ function MyTours() {
         }
 
         if (data.status === 'success') {
-          setTotalPages(Math.ceil(data.totalDocs / 3))
+          setTotalPages(Math.ceil(data.totalDocs / 6))
           setBookings(data.data.bookings)
           setLoading(false)
         }
@@ -60,7 +60,7 @@ function MyTours() {
     }
 
     fetchBookings()
-  }, [])
+  }, [page])
 
   if (loading) {
     return (
@@ -98,30 +98,38 @@ function MyTours() {
           ))
         }
         <div className="paginate">
-          <button type="button" className={page == 1 ? 'btn-hidden' : ''} onClick={() => { setPage(page - 1) }}>
-            <svg className='icon-green icon-small'>
-              <use xlinkHref="/img/icons.svg#icon-arrow-left"></use>
-            </svg>
-          </button>
           {
-            Array.from({ length: totalPages }, (_, i) => i + 1).map((i) => (
-              <button
-                key={i}
-                type="button"
-                className={page === i ? 'btn-active' : ''}
-                onClick={() => {
-                  setPage(i);
-                }}
-              >
-                {i}
-              </button>
-            ))
+            bookings.length > 0 ? (
+              <>
+                <button type="button" className={page == 1 ? 'btn-hidden' : ''} onClick={() => { setPage(page - 1) }}>
+                  <svg className='icon-green icon-small'>
+                    <use xlinkHref="/img/icons.svg#icon-arrow-left"></use>
+                  </svg>
+                </button>
+                {
+                  Array.from({ length: totalPages }, (_, i) => i + 1).map((i) => (
+                    <button
+                      key={i}
+                      type="button"
+                      className={page === i ? 'btn-active' : ''}
+                      onClick={() => {
+                        setPage(i);
+                      }}
+                    >
+                      {i}
+                    </button>
+                  ))
+                }
+                <button type="button" className={page == totalPages ? 'btn-hidden' : ''} onClick={() => { setPage(page + 1) }}>
+                  <svg className='icon-green icon-small'>
+                    <use xlinkHref="/img/icons.svg#icon-arrow-right"></use>
+                  </svg>
+                </button>
+              </>
+            ) : (
+              <p className="no-tours">You have no bookings yet. <Link to="/" className="no-tours-link">Book a tour now</Link></p>
+            )
           }
-          <button type="button" className={page == totalPages ? 'btn-hidden' : ''} onClick={() => { setPage(page + 1) }}>
-            <svg className='icon-green icon-small'>
-              <use xlinkHref="/img/icons.svg#icon-arrow-right"></use>
-            </svg>
-          </button>
         </div>
       </div>
     </div >

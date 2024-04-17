@@ -12,6 +12,8 @@ import { cloudinary } from '~/utils/cloudinary'
 import fs from 'fs'
 import util from 'util'
 import path from 'path'
+import { Booking } from '~/models/booking.model'
+import { Review } from '~/models/review.model'
 
 const filterObj = (obj, ...allowedFields) => {
   return Object.keys(obj).reduce((acc, key) => {
@@ -65,8 +67,27 @@ export const updateMe = catchAsync(async (req, res, next) => {
   res.status(200).json({ status: 'success', data: { user } })
 })
 
-export const deleteMe = catchAsync(async (req, res, next) => {
-  await User.findByIdAndUpdate(req.user.id, { active: false })
+export const deactivateMe = catchAsync(async (req, res, next) => {
+  await User.findByIdAndUpdate(req.user._id, { active: false })
 
-  res.status(204).json({ status: 'success', data: null })
+  res.status(200).json({ status: 'success', data: null })
+})
+
+export const deleteMe = catchAsync(async (req, res, next) => {
+  if (req.user.photo_publicId != '') {
+    await Promise.all([
+      User.findByIdAndDelete(req.user._id),
+      cloudinary.uploader.destroy(req.user.photo_publicId),
+      Booking.deleteMany({ user: req.user._id }),
+      Review.deleteMany({ user: req.user._id })
+    ])
+  } else {
+    await Promise.all([
+      User.findByIdAndDelete(req.user._id),
+      Booking.deleteMany({ user: req.user._id }),
+      Review.deleteMany({ user: req.user._id })
+    ])
+  }
+
+  res.status(200).json({ status: 'success', data: null })
 })

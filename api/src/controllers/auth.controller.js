@@ -47,7 +47,7 @@ export const signIn = catchAsync(async (req, res, next) => {
   const user = await User.findOne({ email }).select('+password')
 
   if (!user || !(await user.correctPassword(password))) {
-    throw new ApiError(400, 'Incorrect email or password')
+    throw new ApiError(400, 'Incorrect email or password or user is inactive')
   }
 
   const { password: pass, ...rest } = user._doc

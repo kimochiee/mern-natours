@@ -239,6 +239,11 @@ html {
   background-color: #2e864b;
 }
 
+.btn:focus.btn--red {
+  outline: none;
+  background-color: #af2623;
+}
+
 .btn--white {
   background-color: #fff;
   color: #777;
@@ -253,6 +258,15 @@ html {
 }
 .btn--green::after {
   background-color: #55c57a;
+}
+
+.btn--red {
+  background-color: #eb4d4b;
+  color: #fff;
+}
+
+.btn--red::after {
+  background-color: #eb4d4b;
 }
 
 .btn--small {
@@ -1576,4 +1590,45 @@ html {
   text-transform: uppercase;
   padding: .5rem 1.5rem;
   border-radius: 5rem;
+}
+
+.no-tours {
+  font-size: 1.6rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.no-tours-link {
+  color: #55c57a;
+  display: inline-block;
+  text-decoration: none;
+  border-bottom: 1px solid #55c57a;
+  padding: 3px;
+  -webkit-transition: all 0.2s;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.input-radio-container {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+}
+
+.input-radio-container input:checked {
+  background-color: #55c57a;
+}
+.input-radio-container input {
+  outline: 2px solid #55c57a;
+  outline-offset: 2px;
+  border-radius: 50%;
+  padding: .6rem;
+  appearance: none;
+  cursor: pointer;
+  margin-top: .8rem;
+}
+
+.input-radio-container label {
+  font-size: 1.6rem;
 }

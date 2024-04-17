@@ -21,9 +21,9 @@ function SideNav() {
     <nav className='user-view__menu'>
       <ul className='side-nav'>
         <NavItem link='/account?tab=profile' text='My Profile' icon='settings' active={tab === 'profile' || !tab} />
+        <NavItem link='/account?tab=security' text='Security' icon='lock' active={tab === 'security' || !tab} />
         <NavItem link='/account?tab=my-tours' text='My Tours' icon='briefcase' active={tab === 'my-tours' || !tab} />
         <NavItem link='/account?tab=my-reviews' text='My Reviews' icon='star' active={tab === 'my-reviews' || !tab} />
-        <NavItem link='/account?tab=my-billing' text='Billing' icon='credit-card' active={tab === 'my-billing' || !tab} />
       </ul>
       {currentNatoursUser.role === 'admin' && (<>
         <div className='admin-nav'>

@@ -6,8 +6,10 @@ export const getAll = (model) => {
   return catchAsync(async (req, res, next) => {
     const features = new ApiFeatures(model.find().lean(), req.query)
 
-    const docs = await features.filter().sort().limitFields().paginate().query
-    const totalDocs = await model.countDocuments()
+    const [docs, totalDocs] = await Promise.all([
+      features.filter().sort().limitFields().paginate().query,
+      model.countDocuments()
+    ])
 
     res.status(200).json({
       status: 'success',

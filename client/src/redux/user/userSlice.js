@@ -54,6 +54,10 @@ export const userSlice = createSlice({
     updateUserPasswordFailure: (state, action) => {
       state.loading = false
       state.error = action.payload
+    },
+    deactivateOrDeleteUser: (state) => {
+      state.currentNatoursUser = null
+      state.error = null
     }
   }
 })
@@ -68,7 +72,8 @@ export const {
   updateUserDataFailure,
   updateUserPasswordStart,
   updateUserPasswordSuccess,
-  updateUserPasswordFailure
+  updateUserPasswordFailure,
+  deactivateOrDeleteUser
 } = userSlice.actions
 
 export default userSlice.reducer
