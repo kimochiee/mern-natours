@@ -8,9 +8,12 @@ function MyTours() {
   const [bookings, setBookings] = useState([])
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
+  const [refundState, setRefundState] = useState('refund')
 
   const handleRefund = async (id) => {
     try {
+      setRefundState('processing...')
+
       const res = await fetch(`http://localhost:8000/api/v1/bookings/refund/${id}`, {
         method: 'DELETE',
         credentials: 'include'
@@ -23,10 +26,12 @@ function MyTours() {
       }
 
       if (data.status === 'success') {
+        setRefundState('refund')
         notify('Refund successful!', 'success')
         setBookings(bookings.filter(booking => booking._id !== id))
       }
     } catch (error) {
+      setRefundState('refund')
       notify(error.message, 'error')
       console.log(error)
     }
@@ -90,7 +95,7 @@ function MyTours() {
                   </p>
                 </div>
                 <div className="review_links">
-                  <p className="btn-secondary" onClick={() => handleRefund(booking._id)}>Refund</p>
+                  <p className="btn-secondary" onClick={() => handleRefund(booking._id)}>{refundState}</p>
                 </div>
               </div>
               <div className="line line-small">&nbsp;</div>

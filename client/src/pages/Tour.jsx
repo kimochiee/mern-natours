@@ -51,6 +51,7 @@ function Tour() {
         const res = await fetch(`http://localhost:8000/api/v1/tours/${tourId}`)
 
         const data = await res.json()
+        console.log(data)
 
         if (!res.ok) {
           setError('No tour found with that ID')
@@ -91,7 +92,7 @@ function Tour() {
 
   return (
     <>
-      <section className='section-header'>
+      {/* <section className='section-header'>
         <div className='header__hero'>
           <div className='header__hero-overlay'>&nbsp;</div>
           <img className='header__hero-img' src={`img/tours/${tour.imageCover}`} alt={`${tour.name}`} />
@@ -177,7 +178,7 @@ function Tour() {
             return <ReviewCard key={i} review={review} />
           })}
         </div>
-      </section>
+      </section> */}
 
       <section className='section-cta'>
         <div className='cta'>
@@ -187,19 +188,54 @@ function Tour() {
           <img src={`img/tours/${tour.images[1]}`} alt='' className='cta__img cta__img--1' />
           <img src={`img/tours/${tour.images[2]}`} alt='' className='cta__img cta__img--2' />
 
-          <div className='cta__content'>
+          {/* <div className='cta__content'>
             <h2 className='heading-secondary'>What are you waiting for?</h2>
             <p className='cta__text'>
               {tour.duration} days. 1 adventure. Infinite memories. Make it yours today!
             </p>
             {
               currentNatoursUser ?
-                <button className='btn btn--green span-all-rows' onClick={handleBookTour}>
+                <button className='btn btn--green span-all-rows'>
                   {processing ? 'Processing...' : 'Book tour now!'}
                 </button>
                 :
                 <Link to='/sign-in' className='btn btn--green span-all-rows'>Log in to book tour</Link>
             }
+          </div> */}
+
+          <div className="tour_dates">
+            <div className="dates_container">
+              <h3>Available Dates</h3>
+              <p>July 20, 2023</p>
+              <p>October 5, 2023</p>
+              <p>April 25, 2024</p>
+            </div>
+            <div className="dates_container">
+              <h3>Tickets Available</h3>
+              <p>24</p><p>23</p><p>25</p>
+            </div>
+            <div className="vertical-line">&nbsp;</div>
+            <form className="form_booking">
+              <div className="date_input">
+                <svg className="icon-green icon-small icon-down booking-down">
+                  <use xlinkHref="/img/icons.svg#icon-chevron-down"></use>
+                </svg>
+                <select name="date">
+                  <option value="">CHOOSE DATE:</option>
+                  <option value="2023-07-20T09:00:00.000Z">July 20, 2023</option>
+                  <option value="2023-10-05T09:00:00.000Z">October 5, 2023</option>
+                  <option value="2024-04-25T09:00:00.000Z">April 25, 2024</option>
+                </select>
+              </div>
+              <div className="booking_tickets">
+                <button type="button">-</button>
+                <p>1</p>
+                <button type="button">+</button>
+              </div>
+              <div className="center">
+                <button type="submit" className="btn btn--green btn--large ma-t-lg false">Book</button>
+              </div>
+            </form>
           </div>
         </div>
       </section>

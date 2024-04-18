@@ -3,6 +3,7 @@ import {
   createReview,
   deleteReview,
   getAllReviews,
+  getMyReviews,
   getReview,
   setTourUserIds,
   updateReview
@@ -11,15 +12,20 @@ import { protect, restrictTo } from '../middlewares/auth.middleware.js'
 
 const router = Router({ mergeParams: true })
 
+// current user revierws
+router.use(protect)
+router.route('/myReviews').get(getMyReviews)
+
+// crud reviews
 router
   .route('/')
   .get(getAllReviews)
-  .post(protect, restrictTo('user'), setTourUserIds, createReview)
+  .post(restrictTo('user'), setTourUserIds, createReview)
 
 router
   .route('/:id')
   .get(getReview)
-  .patch(protect, restrictTo('user', 'admin'), updateReview)
-  .delete(protect, restrictTo('user', 'admin'), deleteReview)
+  .patch(restrictTo('user', 'admin'), updateReview)
+  .delete(restrictTo('user', 'admin'), deleteReview)
 
 export default router
