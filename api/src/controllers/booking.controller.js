@@ -15,11 +15,39 @@ import { ApiFeatures } from '~/utils/ApiFeatures'
 
 const stripe = new Stripe(env.stripe.SECRET_KEY)
 
-export const getCheckoutSession = catchAsync(async (req, res, next) => {
-  // 1) get currently booked tour
-  const tour = await Tour.findById(req.params.tourId)
+export const createCheckoutSession = catchAsync(async (req, res, next) => {
+  const { date, tickets } = req.body
+  const { tourId } = req.params
 
-  // 2) create checkout session
+  if (!date || !tickets) {
+    throw new ApiError(400, 'Please provide a date and ticket quantity')
+  }
+
+  // get certain booking by date
+  const booking = await Booking.findOne({
+    tour: tourId,
+    user: req.user._id
+  })
+
+  if (booking) {
+    throw new ApiError(400, 'You already booked this tour')
+  }
+
+  // get currently booked tour
+  const tour = await Tour.findById(tourId)
+
+  // check tickets availability
+  const dateObj = tour.startDates.find(
+    (d) => d.dateValue.getTime() === new Date(date).getTime()
+  )
+
+  const availableTickets = tour.maxGroupSize - dateObj.participants
+
+  if (tickets > availableTickets) {
+    throw new ApiError(400, 'Not enough tickets available')
+  }
+
+  // // create checkout session
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card'],
     success_url: `${req.headers.origin}/success?session_id={CHECKOUT_SESSION_ID}`,
@@ -29,28 +57,30 @@ export const getCheckoutSession = catchAsync(async (req, res, next) => {
       req.params.tourId + ' ' + req.user._id + ' ' + tour.price,
     line_items: [
       {
+        quantity: tickets,
         price_data: {
-          unit_amount: tour.price * 100,
           currency: 'usd',
+          unit_amount: tour.price * 100,
           product_data: {
             name: `${tour.name} Tour`,
-            images: [
-              tour.imageCover.startsWith('http')
-                ? tour.imageCover
-                : `${req.protocol}://${req.get('host')}/img/tours/${
-                    tour.imageCover
-                  }`
-            ],
             description: tour.summary
           }
-        },
-        quantity: 1
+        }
       }
     ],
+    invoice_creation: {
+      enabled: true,
+      invoice_data: {
+        metadata: {
+          tourStartDate: date,
+          tickets
+        }
+      }
+    },
     mode: 'payment'
   })
 
-  // 3) send session to client
+  // // send session to client
   res.status(200).json({
     status: 'success',
     session
@@ -64,8 +94,13 @@ export const createBookingCheckout = catchAsync(async (req, res, next) => {
     tour: session.client_reference_id.split(' ')[0],
     user: session.client_reference_id.split(' ')[1],
     price: session.client_reference_id.split(' ')[2],
-    payment_intent: session.payment_intent
+    payment_intent: session.payment_intent,
+    tourStartDate: session.invoice_creation.invoice_data.metadata.tourStartDate,
+    tickets: session.invoice_creation.invoice_data.metadata.tickets,
+    status: 'paid'
   }
+
+  const tour = await Tour.findById(bookingData.tour)
 
   const existingBooking = await Booking.findOne(bookingData)
 
@@ -78,6 +113,13 @@ export const createBookingCheckout = catchAsync(async (req, res, next) => {
   if (!booking) {
     throw new ApiError(400, 'Booking failed.')
   }
+
+  tour.startDates.find(
+    (el) =>
+      el.dateValue.getTime() === new Date(bookingData.tourStartDate).getTime()
+  ).participants += bookingData.tickets * 1
+
+  await tour.save()
 
   res.status(200).json({ status: 'success', session })
 })

@@ -34,7 +34,7 @@ function App() {
           <Route path='/success' element={<Success />} />
         </Route>
         <Route path='/tour/:tourId' element={<Tour />} />
-        <Route path='*' element={<Error />} />
+        <Route path='*' element={<Error error='Page Not Found' />} />
       </Routes>
       <Footer />
     </BrowserRouter>

@@ -1,5 +1,6 @@
-export const localeDate = (date, locale) => {
-  return new Date(date).toLocaleString(locale, {
+export const localeDate = (date, day) => {
+  return new Date(date).toLocaleString('en-us', {
+    day: day ? 'numeric' : undefined,
     month: 'long',
     year: 'numeric'
   })

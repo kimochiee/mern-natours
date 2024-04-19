@@ -20,7 +20,23 @@ const bookingSchema = new mongoose.Schema(
       type: Boolean,
       default: true
     },
-    payment_intent: String
+    status: {
+      type: String,
+      enum: {
+        values: ['pending', 'paid', 'canceled', 'refunded'],
+        message:
+          'Booking status can be - pending, paid, canceled and refunded only'
+      }
+    },
+    payment_intent: String,
+    tourStartDate: {
+      type: Date,
+      required: [true, 'Booking must have a start date']
+    },
+    tickets: {
+      type: Number,
+      required: [true, 'Booking must have a ticket quantity']
+    }
   },
   {
     timestamps: true,
@@ -34,10 +50,15 @@ bookingSchema.index({ tour: 1, user: 1 }, { unique: true })
 
 // Populate user and tour
 bookingSchema.pre(/^find/, function (next) {
+  // this.populate({
+  //   path: 'user',
+  //   select: 'name email'
+  // }).populate({
+  //   path: 'tour',
+  //   select: 'name imageCover'
+  // })
+
   this.populate({
-    path: 'user',
-    select: 'name email'
-  }).populate({
     path: 'tour',
     select: 'name imageCover'
   })

@@ -5,7 +5,7 @@ import {
   deleteBooking,
   getAllBookings,
   getBooking,
-  getCheckoutSession,
+  createCheckoutSession,
   getMyBookings,
   refundBooking,
   updateBooking
@@ -16,7 +16,7 @@ const router = Router()
 
 // get checkout session
 router.use(protect)
-router.route('/checkout-session/:tourId').get(getCheckoutSession)
+router.route('/checkout-session/:tourId').post(createCheckoutSession)
 
 // current user bookings
 router.route('/myBookings').get(getMyBookings)

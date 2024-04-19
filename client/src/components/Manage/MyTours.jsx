@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { Link } from 'react-router-dom'
 import { notify } from "../../utils/notify"
 import Loader from "../Loader"
+import { localeDate } from "../../utils/localeDate"
 
 function MyTours() {
   const [loading, setLoading] = useState(true)
@@ -86,12 +87,12 @@ function MyTours() {
                   <h3>
                     <Link to={`/tour/${booking.tour._id}`} className="review_tour_link">{booking.tour.name}</Link>
                   </h3>
-                  <p className="ma-bt-sm">You booked on {booking.createdAt}</p>
+                  <p className="ma-bt-sm">You booked on {localeDate(booking.createdAt, true)}</p>
                   <p className="booking-price">
                     Total: $
                     {booking.price}
                     <span className="booking_status booking_paid">
-                      {booking.paid ? 'Paid' : 'None'}</span>
+                      {booking.paid ? 'Paid' : 'Refunded'}</span>
                   </p>
                 </div>
                 <div className="review_links">

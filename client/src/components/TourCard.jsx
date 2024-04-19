@@ -35,7 +35,7 @@ function TourCard({ tour }) {
           <svg className='card__icon'>
             <use xlinkHref='img/icons.svg#icon-calendar'></use>
           </svg>
-          <span>{localeDate(tour.startDates[0], 'en-us')}</span>
+          <span>{localeDate(tour.startDates[0].dateValue)}</span>
         </div>
         <div className='card__data'>
           <svg className='card__icon'>
