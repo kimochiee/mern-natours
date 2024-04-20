@@ -1670,7 +1670,7 @@ body.active-modal {
 
 .form-modal {
   top: 8rem;
-  height: 80vh;
+  height: auto;
   text-align: left;
 }
 
@@ -1815,4 +1815,24 @@ button[type="button"]:disabled {
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
+}
+
+.booking-status-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  row-gap: 1rem;
+  padding: 2rem;
+  border: 1px solid #55c57a;
+  border-radius: 5px;
+  margin-bottom: 2rem;
+}
+
+.bd-container {
+  display: flex;
+  align-items: center;
+  font-size: 1.4rem;
+}
+
+.bd-container span {
+    font-weight: 700;
 }

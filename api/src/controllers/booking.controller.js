@@ -144,17 +144,33 @@ export const getMyBookings = catchAsync(async (req, res, next) => {
 })
 
 export const refundBooking = catchAsync(async (req, res, next) => {
-  const booking = await Booking.findByIdAndDelete(req.params.bookingId)
+  const booking = await Booking.findById(req.params.bookingId)
 
   if (!booking) {
     throw new ApiError(404, 'No booking found with that ID')
   }
 
-  const session = await stripe.refunds.create({
-    payment_intent: booking.payment_intent
-  })
+  const tour = await Tour.findById(booking.tour._id)
 
-  res.status(200).json({ status: 'success', session })
+  if (!tour) {
+    throw new ApiError(404, 'No tour found with that ID')
+  }
+
+  tour.startDates.find(
+    (el) => el.dateValue.getTime() === new Date(booking.tourStartDate).getTime()
+  ).participants -= booking.tickets * 1
+
+  booking.status = 'refunded'
+
+  await Promise.all([
+    stripe.refunds.create({
+      payment_intent: booking.payment_intent
+    }),
+    tour.save(),
+    booking.save()
+  ])
+
+  res.status(200).json({ status: 'success', data: { booking } })
 })
 
 export const createBooking = createOne(Booking)

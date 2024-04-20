@@ -21,7 +21,7 @@ router.route('/checkout-session/:tourId').post(createCheckoutSession)
 // current user bookings
 router.route('/myBookings').get(getMyBookings)
 router.route('/createBookingCheckout').post(createBookingCheckout)
-router.route('/refund/:bookingId').delete(refundBooking)
+router.route('/refund/:bookingId').patch(refundBooking)
 
 // crud bookings
 router.use(restrictTo('admin', 'lead-guide'))

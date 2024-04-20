@@ -16,10 +16,6 @@ const bookingSchema = new mongoose.Schema(
       type: Number,
       required: [true, 'Booking must have a price']
     },
-    paid: {
-      type: Boolean,
-      default: true
-    },
     status: {
       type: String,
       enum: {
@@ -60,7 +56,7 @@ bookingSchema.pre(/^find/, function (next) {
 
   this.populate({
     path: 'tour',
-    select: 'name imageCover'
+    select: 'name imageCover duration'
   })
 
   next()
