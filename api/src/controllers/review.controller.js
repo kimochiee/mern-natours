@@ -8,6 +8,7 @@ import {
 } from './factory.handler'
 import { catchAsync } from '~/utils/catchAsync'
 import { ApiFeatures } from '~/utils/ApiFeatures'
+import { Booking } from '~/models/booking.model'
 
 export const setTourUserIds = (req, res, next) => {
   if (!req.body.tour) req.body.tour = req.params.tourId
@@ -37,6 +38,17 @@ export const getMyReviews = catchAsync(async (req, res, next) => {
 
 export const getAllReviews = getAll(Review)
 export const getReview = getOne(Review)
-export const createReview = createOne(Review)
+
+// export const createReview = createOne(Review)
+export const createReview = catchAsync(async (req, res, next) => {
+  const review = await Review.create(req.body)
+  await Booking.findOneAndUpdate(
+    { tour: review.tour, user: review.user },
+    { review: review._id }
+  )
+
+  res.status(201).json({ status: 'success', data: review })
+})
+
 export const updateReview = updateOne(Review)
 export const deleteReview = deleteOne(Review)

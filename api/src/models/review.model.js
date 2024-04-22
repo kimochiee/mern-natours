@@ -75,7 +75,7 @@ reviewSchema.statics.calcAverageRatings = async function (tourId) {
 }
 
 // Update average rating after save
-reviewSchema.post('save', function (next) {
+reviewSchema.post('save', function (val, next) {
   this.constructor.calcAverageRatings(this.tour)
 
   next()

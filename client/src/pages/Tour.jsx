@@ -62,9 +62,9 @@ function Tour() {
 
       <TourPictures tour={tour} />
 
-      <TourMap tour={tour} />
+      <TourMap tour={tour} /> */}
 
-      <TourReviews tour={tour} /> */}
+      <TourReviews reviews={tour.reviews} />
 
       <BookingTour tour={tour} />
     </>

@@ -12,6 +12,10 @@ const bookingSchema = new mongoose.Schema(
       ref: 'User',
       required: [true, 'Booking must belong to a user']
     },
+    review: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Review'
+    },
     price: {
       type: Number,
       required: [true, 'Booking must have a price']
@@ -46,17 +50,11 @@ bookingSchema.index({ tour: 1, user: 1 }, { unique: true })
 
 // Populate user and tour
 bookingSchema.pre(/^find/, function (next) {
-  // this.populate({
-  //   path: 'user',
-  //   select: 'name email'
-  // }).populate({
-  //   path: 'tour',
-  //   select: 'name imageCover'
-  // })
-
   this.populate({
     path: 'tour',
     select: 'name imageCover duration'
+  }).populate({
+    path: 'review'
   })
 
   next()

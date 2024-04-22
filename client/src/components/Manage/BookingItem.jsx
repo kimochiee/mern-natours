@@ -5,11 +5,11 @@ import { useState } from 'react';
 import { localeDate } from '../../utils/localeDate';
 import { notify } from '../../utils/notify';
 
-import ReviewModal from "./ReviewModal"
+import Modal from "./Modal"
 import BookingDetailsItem from './BookingDetailsItem';
 
 function BookingItem({ booking, setBookings }) {
-  const [processing, setProcessing] = useState('confirm')
+  const [process, setProcess] = useState('confirm')
 
   let daysRemaining
   if (Date.now() > new Date(booking.tourStartDate).getTime() + booking.tour.duration * 24 * 60 * 60 * 1000) {
@@ -34,7 +34,7 @@ function BookingItem({ booking, setBookings }) {
     }
 
     try {
-      setProcessing('processing...')
+      setProcess('processing...')
 
       const res = await fetch(`http://localhost:8000/api/v1/bookings/refund/${booking._id}`, {
         method: 'PATCH',
@@ -44,17 +44,17 @@ function BookingItem({ booking, setBookings }) {
       const data = await res.json()
 
       if (!res.ok) {
-        setProcessing('confirm')
+        setProcess('confirm')
         return notify(data.message, 'error')
       }
 
       if (data.status === 'success') {
         setBookings(prevBookings => prevBookings.map(b => b._id === data.data.booking._id ? data.data.booking : b))
-        setProcessing('confirm')
+        setProcess('confirm')
         notify('Refund successful!', 'success')
       }
     } catch (error) {
-      setProcessing('confirm')
+      setProcess('confirm')
       notify(error.message, 'error')
       console.log(error)
     }
@@ -79,7 +79,7 @@ function BookingItem({ booking, setBookings }) {
           </p>
         </div>
         <div className="review_links">
-          <ReviewModal text='refund' header='do you want to refund this booking?' process={processing} tour={booking.tour} handle={handleRefund} />
+          <Modal text='refund' header='do you want to refund this booking?' process={process} tour={booking.tour} handle={handleRefund} />
         </div>
       </div>
       <div className="booking-status-container">

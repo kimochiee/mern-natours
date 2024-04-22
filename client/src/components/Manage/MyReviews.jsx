@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react"
 import { Link } from 'react-router-dom'
-import { notify } from "../../utils/notify"
+// import { notify } from "../../utils/notify"
 import Loader from "../Loader"
-import ReviewModal from "./ReviewModal"
+import ReviewItem from "./ReviewItem"
 
 function MyReviews() {
   const [loading, setLoading] = useState(true)
   const [bookings, setBookings] = useState([])
-  const [reviews, setReviews] = useState([])
+  // const [reviews, setReviews] = useState([])
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
 
@@ -38,34 +38,34 @@ function MyReviews() {
       }
     }
 
-    const fetchReviews = async () => {
-      try {
-        setLoading(true)
+    // const fetchReviews = async () => {
+    //   try {
+    //     setLoading(true)
 
-        const res = await fetch(`http://localhost:8000/api/v1/reviews/myReviews?page=${page}`, {
-          method: 'GET',
-          credentials: 'include'
-        })
+    //     const res = await fetch(`http://localhost:8000/api/v1/reviews/myReviews?page=${page}`, {
+    //       method: 'GET',
+    //       credentials: 'include'
+    //     })
 
-        const data = await res.json()
+    //     const data = await res.json()
 
-        if (!res.ok) {
-          setLoading(false)
-        }
+    //     if (!res.ok) {
+    //       setLoading(false)
+    //     }
 
-        if (data.status === 'success') {
-          setTotalPages(Math.ceil(data.totalDocs / 6))
-          setReviews(data.data.reviews)
-          setLoading(false)
-        }
-      } catch (error) {
-        setLoading(false)
-        console.log(error.message)
-      }
-    }
+    //     if (data.status === 'success') {
+    //       setTotalPages(Math.ceil(data.totalDocs / 6))
+    //       setReviews(data.data.reviews)
+    //       setLoading(false)
+    //     }
+    //   } catch (error) {
+    //     setLoading(false)
+    //     console.log(error.message)
+    //   }
+    // }
 
     fetchBookings()
-    fetchReviews()
+    // fetchReviews()
   }, [page])
 
   if (loading) {
@@ -79,36 +79,7 @@ function MyReviews() {
       <div className="user-view__inner-container">
         {
           bookings.map(booking => (
-            <div key={booking._id}>
-              <div className="review_tour_details">
-                <img src={`img/tours/${booking.tour.imageCover}`} alt="" className="review_tour_image" />
-                <div className="review_tour_description">
-                  <h3>
-                    <Link to={`/tour/${booking.tour._id}`} className="review_tour_link">{booking.tour.name}</Link>
-                  </h3>
-                  <p className="ma-bt-sm">You booked on {booking.createdAt}</p>
-                  <svg className="icon-small icon-rating icon-inactive">
-                    <use xlinkHref="/img/icons.svg#icon-star"></use>
-                  </svg>
-                  <svg className="icon-small icon-rating icon-inactive">
-                    <use xlinkHref="/img/icons.svg#icon-star"></use>
-                  </svg>
-                  <svg className="icon-small icon-rating icon-inactive">
-                    <use xlinkHref="/img/icons.svg#icon-star"></use>
-                  </svg>
-                  <svg className="icon-small icon-rating icon-inactive">
-                    <use xlinkHref="/img/icons.svg#icon-star"></use>
-                  </svg>
-                  <svg className="icon-small icon-rating icon-inactive">
-                    <use xlinkHref="/img/icons.svg#icon-star"></use>
-                  </svg>
-                </div>
-                <div className="review_links">
-                  <ReviewModal />
-                </div>
-              </div>
-              <div className="line line-small">&nbsp;</div>
-            </div>
+            <ReviewItem key={booking._id} booking={booking} setBookings={setBookings} />
           ))
         }
         <div className="paginate">
