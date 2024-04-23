@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react"
 import { Link } from 'react-router-dom'
-// import { notify } from "../../utils/notify"
 import Loader from "../Loader"
 import ReviewItem from "./ReviewItem"
 
 function MyReviews() {
   const [loading, setLoading] = useState(true)
   const [bookings, setBookings] = useState([])
-  // const [reviews, setReviews] = useState([])
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
 

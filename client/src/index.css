@@ -1836,3 +1836,13 @@ button[type="button"]:disabled {
 .bd-container span {
     font-weight: 700;
 }
+
+.secondary--red {
+  color: #eb4d4b;
+  border-bottom: 1px solid #eb4d4b;
+}
+
+.secondary--red:hover {
+  background-color: #eb4d4b !important;
+  color: #fff;
+}

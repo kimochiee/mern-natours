@@ -83,14 +83,14 @@ reviewSchema.post('save', function (val, next) {
 
 // Get review to update or delete
 reviewSchema.pre(/^findOneAnd/, async function (next) {
-  this.r = await this.findOne()
+  this.r = await this.clone().findOne()
 
   next()
 })
 
 // Update average rating after update or delete
-reviewSchema.post(/^findOneAnd/, async function (next) {
-  await this.r.constructor.calcAverageRatings(this.r.tour)
+reviewSchema.post(/^findOneAnd/, async function (doc, next) {
+  await this.r.constructor.calcAverageRatings(this.r.tour._id)
 
   next()
 })

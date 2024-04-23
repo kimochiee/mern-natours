@@ -9,6 +9,7 @@ import {
 import { catchAsync } from '~/utils/catchAsync'
 import { ApiFeatures } from '~/utils/ApiFeatures'
 import { Booking } from '~/models/booking.model'
+import { ApiError } from '~/utils/ApiError'
 
 export const setTourUserIds = (req, res, next) => {
   if (!req.body.tour) req.body.tour = req.params.tourId
@@ -51,4 +52,19 @@ export const createReview = catchAsync(async (req, res, next) => {
 })
 
 export const updateReview = updateOne(Review)
-export const deleteReview = deleteOne(Review)
+
+// export const deleteReview = deleteOne(Review)
+export const deleteReview = catchAsync(async (req, res, next) => {
+  const review = await Review.findByIdAndDelete(req.params.id)
+
+  if (!review) {
+    throw new ApiError(404, `No ${Review} found with that ID`)
+  }
+
+  await Booking.findOneAndUpdate(
+    { tour: review.tour, user: review.user },
+    { review: null }
+  )
+
+  res.status(200).json({ status: 'success' })
+})
