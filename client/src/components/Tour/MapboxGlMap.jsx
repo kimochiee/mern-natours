@@ -1,10 +1,10 @@
 import { useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import mapboxgl from 'mapbox-gl';
-
 import 'mapbox-gl/dist/mapbox-gl.css';
+import env from '../../config/env';
 
-mapboxgl.accessToken = 'pk.eyJ1Ijoiam9uYXNzY2htZWR0bWFubiIsImEiOiJjam54ZmM5N3gwNjAzM3dtZDNxYTVlMnd2In0.ytpI7V7w7cyT1Kq5rT9Z1A'
+mapboxgl.accessToken = env.MAPBOXGL_ACCESS_TOKEN
 
 function MapboxGlMap({ data }) {
   const mapContainer = useRef(null);

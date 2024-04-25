@@ -1,7 +1,8 @@
-import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { updateUserDataFailure, updateUserDataStart, updateUserDataSuccess, } from '../../redux/user/userSlice';
-import { notify } from '../../utils/notify';
+import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { updateUserDataFailure, updateUserDataStart, updateUserDataSuccess, } from '../../redux/user/userSlice'
+import { notify } from '../../utils/notify'
+import env from '../../config/env'
 
 function UserProfile() {
   const { currentNatoursUser, loading } = useSelector((state) => state.user)
@@ -40,7 +41,7 @@ function UserProfile() {
       formData.append('email', userData.email)
       formData.append('photo', userData.photo)
 
-      const res = await fetch('http://localhost:8000/api/v1/users/updateMe', {
+      const res = await fetch(`${env.API_ROOT}/api/v1/users/updateMe`, {
         method: 'PATCH',
         credentials: 'include',
         body: formData

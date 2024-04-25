@@ -20,26 +20,16 @@ app.use(express.static(`${__dirname}/public`))
 app.use('/api/v1', router)
 app.use(errorMiddleware)
 
-const server = app.listen(env.PORT, async () => {
-  await connectDB()
+if (env.BUILD_MODE === 'prod') {
+  app.listen(process.env.PORT, async () => {
+    await connectDB()
 
-  console.log(`Server running on port ${env.PORT}`)
-})
-
-process.on('unhandledRejection', (err) => {
-  console.log('UNHANDLED REJECTION! Shutting down...')
-  console.log(err)
-
-  server.close(() => {
-    process.exit(1)
+    console.log(`Pro: Server is running on port ${process.env.PORT}`)
   })
-})
+} else {
+  app.listen(env.PORT, async () => {
+    await connectDB()
 
-process.on('uncaughtException', (err) => {
-  console.log('UNCAUGHT EXCEPTION! Shutting down...')
-  console.log(err)
-
-  server.close(() => {
-    process.exit(1)
+    console.log(`Dev: Server is running on port ${env.PORT}`)
   })
-})
+}

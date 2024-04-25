@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import { logOutSuccess } from '../redux/user/userSlice'
 import { notify } from '../utils/notify'
+import env from '../config/env'
 
 function Header() {
   const { currentNatoursUser } = useSelector((state) => state.user)
@@ -10,7 +11,7 @@ function Header() {
 
   const handleLogOut = async () => {
     try {
-      const res = await fetch('http://localhost:8000/api/v1/users/logout', {
+      const res = await fetch(`${env.API_ROOT}/api/v1/users/logout`, {
         method: 'POST',
         credentials: 'include'
       })
@@ -27,6 +28,7 @@ function Header() {
         navigate('/')
       }
     } catch (error) {
+      notify(error.message, 'error')
       console.log(error.message)
     }
   }

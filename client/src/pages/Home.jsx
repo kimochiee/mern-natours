@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
-
 import TourCard from '../components/TourCard'
 import Loader from '../components/Loader'
+import env from '../config/env'
 
 function Home() {
   const [loading, setLoading] = useState(true)
@@ -15,7 +15,7 @@ function Home() {
       try {
         setLoading(true)
 
-        const response = await fetch(`http://localhost:8000/api/v1/tours?page=${page}&sort=${sort}`)
+        const response = await fetch(`${env.API_ROOT}/api/v1/tours?page=${page}&sort=${sort}`)
         const data = await response.json()
 
         setTours(data.data)
@@ -38,22 +38,19 @@ function Home() {
 
   return (
     <main className='main'>
-      <div className="overview-actions">
-        <div className="manage-queries">
+      <div className='overview-actions'>
+        <div className='manage-queries'>
           <p>Total: {tours.length}</p>
           <p>Page: {page} ({tours.length} results)</p>
         </div>
-        <div className="manage-queries">
-          {/* <div className="filter">
-            <p>Filter</p>
-          </div> */}
-          <div className="input-select-container">
-            <label htmlFor="input-select-label">Sort: </label>
-            <div className="input-select">
+        <div className='manage-queries'>
+          <div className='input-select-container'>
+            <label htmlFor='input-select-label'>Sort: </label>
+            <div className='input-select'>
               <svg className='icon-green icon-small icon-down'>
-                <use xlinkHref="/img/icons.svg#icon-chevron-down"></use>
+                <use xlinkHref='/img/icons.svg#icon-chevron-down'></use>
               </svg>
-              <select name="sort" id="sort" onChange={(e) => { setSort(e.target.value) }}>
+              <select name='sort' id='sort' onChange={(e) => { setSort(e.target.value) }}>
                 <option value>Newest</option>
                 <option value="price">Price Low to High</option>
                 <option value="-price">Price High to Low</option>
@@ -71,17 +68,17 @@ function Home() {
           <h2>No tours available</h2>
         )}
       </div>
-      <div className="paginate">
-        <button type="button" className={page == 1 ? 'btn-hidden' : ''} onClick={() => { setPage(page - 1) }}>
+      <div className='paginate'>
+        <button type='button' className={page == 1 ? 'btn-hidden' : ''} onClick={() => { setPage(page - 1) }}>
           <svg className='icon-green icon-small'>
-            <use xlinkHref="/img/icons.svg#icon-arrow-left"></use>
+            <use xlinkHref='/img/icons.svg#icon-arrow-left'></use>
           </svg>
         </button>
         {
           Array.from({ length: totalPages }, (_, i) => i + 1).map((i) => (
             <button
               key={i}
-              type="button"
+              type='button'
               className={page === i ? 'btn-active' : ''}
               onClick={() => {
                 setPage(i);
@@ -91,9 +88,9 @@ function Home() {
             </button>
           ))
         }
-        <button type="button" className={page == totalPages ? 'btn-hidden' : ''} onClick={() => { setPage(page + 1) }}>
+        <button type='button' className={page == totalPages ? 'btn-hidden' : ''} onClick={() => { setPage(page + 1) }}>
           <svg className='icon-green icon-small'>
-            <use xlinkHref="/img/icons.svg#icon-arrow-right"></use>
+            <use xlinkHref='/img/icons.svg#icon-arrow-right'></use>
           </svg>
         </button>
       </div>

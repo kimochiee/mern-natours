@@ -1,12 +1,13 @@
-import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
+import { useState } from 'react'
 
-import { localeDate } from '../../utils/localeDate';
-import { notify } from '../../utils/notify';
+import { localeDate } from '../../utils/localeDate'
+import { notify } from '../../utils/notify'
 
-import Modal from "./Modal"
-import BookingDetailsItem from './BookingDetailsItem';
+import Modal from './Modal'
+import BookingDetailsItem from './BookingDetailsItem'
+import env from '../../config/env'
 
 function BookingItem({ booking, setBookings }) {
   const [process, setProcess] = useState('confirm')
@@ -36,7 +37,7 @@ function BookingItem({ booking, setBookings }) {
     try {
       setProcess('processing...')
 
-      const res = await fetch(`http://localhost:8000/api/v1/bookings/refund/${booking._id}`, {
+      const res = await fetch(`${env.API_ROOT}/api/v1/bookings/refund/${booking._id}`, {
         method: 'PATCH',
         credentials: 'include'
       })
@@ -62,33 +63,33 @@ function BookingItem({ booking, setBookings }) {
 
   return (
     <div>
-      <p className="sub-heading ma-bt-md">* Full refund if cancel booking before 30 days of tour</p>
-      <div className="review_tour_details">
-        <img src={`img/tours/${booking.tour.imageCover}`} alt="" className="review_tour_image" />
-        <div className="review_tour_description">
+      <p className='sub-heading ma-bt-md'>* Full refund if cancel booking before 30 days of tour</p>
+      <div className='review_tour_details'>
+        <img src={`img/tours/${booking.tour.imageCover}`} alt='' className='review_tour_image' />
+        <div className='review_tour_description'>
           <h3>
-            <Link to={`/tour/${booking.tour._id}`} className="review_tour_link">{booking.tour.name}</Link>
+            <Link to={`/tour/${booking.tour._id}`} className='review_tour_link'>{booking.tour.name}</Link>
           </h3>
-          <p className="ma-bt-sm">You booked on {localeDate(booking.createdAt, true)}</p>
-          <p className="booking-price">
+          <p className='ma-bt-sm'>You booked on {localeDate(booking.createdAt, true)}</p>
+          <p className='booking-price'>
             Total: $
             {booking.price * booking.tickets}
-            <span className="booking_status booking_paid">
+            <span className='booking_status booking_paid'>
               {booking.status}
             </span>
           </p>
         </div>
-        <div className="review_links">
+        <div className='review_links'>
           <Modal text='refund' header='do you want to refund this booking?' process={process} tour={booking.tour} handle={handleRefund} />
         </div>
       </div>
-      <div className="booking-status-container">
+      <div className='booking-status-container'>
         <BookingDetailsItem text='Start date' value={localeDate(booking.tourStartDate, true)} />
         <BookingDetailsItem text='Tickets' value={`${booking.tickets} ($${booking.price} per person)`} />
         <BookingDetailsItem text='Tour Status' value={`${daysRemaining}${isNaN(daysRemaining) ? '' : ' days remaining'}`} />
         <BookingDetailsItem text='Refundable' value={daysRemaining > 30 ? 'Yes' : 'No'} />
       </div>
-      <div className="line line-small">&nbsp;</div>
+      <div className='line line-small'>&nbsp;</div>
     </div>
   )
 }

@@ -1,8 +1,9 @@
-import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { updateUserDataFailure, updateUserPasswordFailure, updateUserPasswordStart, updateUserPasswordSuccess, deactivateOrDeleteUser } from '../../redux/user/userSlice';
-import { notify } from '../../utils/notify';
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { updateUserDataFailure, updateUserPasswordFailure, updateUserPasswordStart, updateUserPasswordSuccess, deactivateOrDeleteUser } from '../../redux/user/userSlice'
+import { notify } from '../../utils/notify'
+import { useNavigate } from 'react-router-dom'
+import env from '../../config/env'
 
 function UserSecurity() {
   const { loading } = useSelector((state) => state.user)
@@ -46,7 +47,7 @@ function UserSecurity() {
         dispatch(updateUserPasswordSuccess())
       }
     } catch (error) {
-      console.log(error);
+      console.log(error)
       notify(error.message, 'error')
       dispatch(updateUserPasswordFailure(error.message))
     }
@@ -58,7 +59,7 @@ function UserSecurity() {
     try {
       setActivityLoading(true)
 
-      const res = await fetch(`http://localhost:8000/api/v1/users/${userActivity}`, {
+      const res = await fetch(`${env.API_ROOT}/api/v1/users/${userActivity}`, {
         method: 'DELETE',
         credentials: 'include',
       })
@@ -79,7 +80,7 @@ function UserSecurity() {
     } catch (error) {
       setActivityLoading(false)
       notify(error.message, 'error')
-      console.log(error);
+      console.log(error)
     }
   }
 
@@ -140,15 +141,15 @@ function UserSecurity() {
       <div className='user-view__form-container'>
         <h2 className='heading-secondary ma-bt-md'>DEACTIVATE OR DELETE ACCOUNT</h2>
         <div>
-          <div className="input-radio-container">
-            <input id="deactivate" type="radio" name="activity" value="deactivate" onChange={() => setUserActivity('deactivateMe')} />
-            <label htmlFor="deactivate">
+          <div className='input-radio-container'>
+            <input id='deactivate' type='radio' name='activity' value='deactivate' onChange={() => setUserActivity('deactivateMe')} />
+            <label htmlFor='deactivate'>
               <p><strong>Deactivate Account:</strong> Deactivating your account is <strong>temporary</strong>. Your account will be disabled and will not be visible to other users. Your data will not be deleted. You can reactiavte your acount simply by login.</p>
             </label>
           </div>
-          <div className="input-radio-container">
-            <input id="delete" type="radio" name="activity" value="delete" onChange={() => setUserActivity('deleteMe')} />
-            <label htmlFor="delete">
+          <div className='input-radio-container'>
+            <input id='delete' type='radio' name='activity' value='delete' onChange={() => setUserActivity('deleteMe')} />
+            <label htmlFor='delete'>
               <p><strong>Delete Account:</strong> Deleting your account is <strong>permanent</strong>. All your data (bookings, reviews and <strong style={{ color: 'red' }}>YOUR PAID WILL NOT REFUND</strong>) will be removed and you will not be able to retrieve your account anymore.</p>
             </label>
           </div>

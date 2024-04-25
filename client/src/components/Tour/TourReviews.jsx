@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import ReviewCard from "./ReviewCard"
+import ReviewCard from './ReviewCard'
 
 function TourReviews({ reviews }) {
   return (

@@ -1,7 +1,8 @@
-import { useEffect } from "react"
-import Loader from "../components/Loader"
-import { notify } from "../utils/notify"
-import { useNavigate } from "react-router-dom"
+import { useEffect } from 'react'
+import Loader from '../components/Loader'
+import { notify } from '../utils/notify'
+import { useNavigate } from 'react-router-dom'
+import env from '../config/env'
 
 function Success() {
   const navigate = useNavigate()
@@ -11,7 +12,7 @@ function Success() {
       try {
         const session_id = new URLSearchParams(window.location.search).get('session_id')
 
-        const res = await fetch('http://localhost:8000/api/v1/bookings/createBookingCheckout', {
+        const res = await fetch(`${env.API_ROOT}/api/v1/bookings/createBookingCheckout`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'

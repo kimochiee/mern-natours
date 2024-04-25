@@ -1,6 +1,6 @@
-import PropTypes from 'prop-types';
-import { localeDate } from '../utils/localeDate';
-import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types'
+import { localeDate } from '../utils/localeDate'
+import { Link } from 'react-router-dom'
 
 function TourCard({ tour }) {
   return (
@@ -68,6 +68,6 @@ function TourCard({ tour }) {
 
 TourCard.propTypes = {
   tour: PropTypes.object.isRequired,
-};
+}
 
 export default TourCard

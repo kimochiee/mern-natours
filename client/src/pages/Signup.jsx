@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { signInFailure, signInStart, signInSuccess } from '../redux/user/userSlice'
 import { notify } from '../utils/notify'
+import env from '../config/env'
 
 function Signup() {
   const [formData, setFormData] = useState({})
@@ -31,7 +32,7 @@ function Signup() {
     try {
       dispatch(signInStart())
 
-      const res = await fetch('http://localhost:8000/api/v1/users/signup', {
+      const res = await fetch(`${env.API_ROOT}/api/v1/users/signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

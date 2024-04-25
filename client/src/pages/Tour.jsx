@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-
 import Error from './Error'
-
 import Loader from '../components/Loader'
 import BookingTour from '../components/Tour/BookingTour'
 import TourReviews from '../components/Tour/TourReviews'
@@ -10,6 +8,7 @@ import TourMap from '../components/Tour/TourMap'
 import TourPictures from '../components/Tour/TourPictures'
 import TourDescription from '../components/Tour/TourDescription'
 import TourHeader from '../components/Tour/TourHeader'
+import env from '../config/env'
 
 function Tour() {
   const { tourId } = useParams()
@@ -21,7 +20,7 @@ function Tour() {
     const fetchTour = async () => {
       try {
         setLoading(true)
-        const res = await fetch(`http://localhost:8000/api/v1/tours/${tourId}`)
+        const res = await fetch(`${env.API_ROOT}/api/v1/tours/${tourId}`)
 
         const data = await res.json()
 
@@ -56,13 +55,13 @@ function Tour() {
 
   return (
     <>
-      {/* <TourHeader tour={tour} />
+      <TourHeader tour={tour} />
 
       <TourDescription tour={tour} />
 
       <TourPictures tour={tour} />
 
-      <TourMap tour={tour} /> */}
+      <TourMap tour={tour} />
 
       <TourReviews reviews={tour.reviews} />
 

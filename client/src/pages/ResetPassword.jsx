@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { notify } from '../utils/notify'
+import env from '../config/env'
 
 function ResetPassword() {
   const [password, setPassword] = useState('')
@@ -10,8 +11,8 @@ function ResetPassword() {
 
   const location = useLocation()
   let params = new URLSearchParams(location.search);
-  let token = params.get("token");
-  let email = params.get("email");
+  let token = params.get('token');
+  let email = params.get('email');
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -26,7 +27,7 @@ function ResetPassword() {
 
     try {
       setLoading(true)
-      const res = await fetch('http://localhost:8000/api/v1/users/resetPassword', {
+      const res = await fetch(`${env.API_ROOT}/api/v1/users/resetPassword`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

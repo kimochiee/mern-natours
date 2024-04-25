@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { notify } from '../utils/notify'
+import env from '../config/env'
 
 function ForgotPassword() {
   const [email, setEmail] = useState('')
@@ -19,7 +20,7 @@ function ForgotPassword() {
     try {
       setLoading(true)
 
-      const res = await fetch('http://localhost:8000/api/v1/users/forgotPassword', {
+      const res = await fetch(`${env.API_ROOT}/api/v1/users/forgotPassword`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

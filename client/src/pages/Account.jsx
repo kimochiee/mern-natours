@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom'
-
 import SideNav from '../components/User/SideNav';
 import UserProfile from '../components/Manage/UserProfile';
 import UserSecurity from '../components/Manage/UserSecurity';

@@ -1,9 +1,10 @@
-import PropTypes from 'prop-types';
-import { useState } from 'react';
-import { notify } from '../../utils/notify';
+import PropTypes from 'prop-types'
+import { useState } from 'react'
+import { notify } from '../../utils/notify'
 import { useSelector } from 'react-redux'
-import { Link } from 'react-router-dom';
-import { localeDate } from '../../utils/localeDate';
+import { Link } from 'react-router-dom'
+import { localeDate } from '../../utils/localeDate'
+import env from '../../config/env'
 
 function BookingTour({ tour }) {
   const { currentNatoursUser } = useSelector((state) => state.user)
@@ -15,7 +16,7 @@ function BookingTour({ tour }) {
     try {
       setProcessing(true)
 
-      const res = await fetch(`http://localhost:8000/api/v1/bookings/checkout-session/${tour._id}`, {
+      const res = await fetch(`${env.API_ROOT}/api/v1/bookings/checkout-session/${tour._id}`, {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -67,8 +68,8 @@ function BookingTour({ tour }) {
         </div>
         <img src={`img/tours/${tour.images[1]}`} alt='' className='cta__img cta__img--1' />
         <img src={`img/tours/${tour.images[2]}`} alt='' className='cta__img cta__img--2' />
-        <div className="tour_dates">
-          <div className="dates_container">
+        <div className='tour_dates'>
+          <div className='dates_container'>
             <h3>Available Dates</h3>
             {
               tour.startDates.map(date => {
@@ -76,7 +77,7 @@ function BookingTour({ tour }) {
               })
             }
           </div>
-          <div className="dates_container">
+          <div className='dates_container'>
             <h3>Tickets Available</h3>
             {
               tour.startDates.map(date => {
@@ -84,17 +85,17 @@ function BookingTour({ tour }) {
               })
             }
           </div>
-          <div className="vertical-line">&nbsp;</div>
-          <form className="form_booking">
-            <div className="date_input">
-              <svg className="icon-green icon-small icon-down booking-down">
-                <use xlinkHref="/img/icons.svg#icon-chevron-down"></use>
+          <div className='vertical-line'>&nbsp;</div>
+          <form className='form_booking'>
+            <div className='date_input'>
+              <svg className='icon-green icon-small icon-down booking-down'>
+                <use xlinkHref='/img/icons.svg#icon-chevron-down'></use>
               </svg>
-              <select name="date" onChange={(e) => {
+              <select name='date' onChange={(e) => {
                 setDate(e.target.value)
                 setTickets(0)
               }}>
-                <option value="">CHOOSE DATE:</option>
+                <option value=''>CHOOSE DATE:</option>
                 {
                   tour.startDates.map(date => {
                     return <option key={date._id} value={date.dateValue}>{localeDate(date.dateValue, true)}</option>
@@ -102,19 +103,19 @@ function BookingTour({ tour }) {
                 }
               </select>
             </div>
-            <div className="booking_tickets">
-              <button type="button" onClick={handleTickets} disabled={date && tour.maxGroupSize - tour.startDates.find(d => d.dateValue === date).participants == 0}>-</button>
+            <div className='booking_tickets'>
+              <button type='button' onClick={handleTickets} disabled={date && tour.maxGroupSize - tour.startDates.find(d => d.dateValue === date).participants == 0}>-</button>
               <p>{tickets}</p>
-              <button type="button" onClick={handleTickets} disabled={date && tour.maxGroupSize - tour.startDates.find(d => d.dateValue === date).participants == 0}>+</button>
+              <button type='button' onClick={handleTickets} disabled={date && tour.maxGroupSize - tour.startDates.find(d => d.dateValue === date).participants == 0}>+</button>
             </div>
-            <div className="center">
+            <div className='center'>
               {
                 currentNatoursUser ?
-                  <button type='button' className="btn btn--green btn--large ma-t-lg false" disabled={!date || tickets == 0} onClick={handleBookTour}>
+                  <button type='button' className='btn btn--green btn--large ma-t-lg false' disabled={!date || tickets == 0} onClick={handleBookTour}>
                     {processing ? 'Processing...' : 'Book tour now!'}
                   </button>
                   :
-                  <Link to='/sign-in' className='btn btn--green span-all-rows'>Log in to book tour</Link>
+                  <Link to='/sign-in' className='btn btn--green span-all-rows ma-t-lg'>Log in to book tour</Link>
               }
             </div>
           </form>
