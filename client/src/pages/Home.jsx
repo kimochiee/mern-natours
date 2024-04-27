@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import TourCard from '../components/TourCard'
 import Loader from '../components/Loader'
 import env from '../config/env'
+import Paginate from '../components/Paginate'
 
 function Home() {
   const [loading, setLoading] = useState(true)
@@ -69,30 +70,7 @@ function Home() {
         )}
       </div>
       <div className='paginate'>
-        <button type='button' className={page == 1 ? 'btn-hidden' : ''} onClick={() => { setPage(page - 1) }}>
-          <svg className='icon-green icon-small'>
-            <use xlinkHref='/img/icons.svg#icon-arrow-left'></use>
-          </svg>
-        </button>
-        {
-          Array.from({ length: totalPages }, (_, i) => i + 1).map((i) => (
-            <button
-              key={i}
-              type='button'
-              className={page === i ? 'btn-active' : ''}
-              onClick={() => {
-                setPage(i);
-              }}
-            >
-              {i}
-            </button>
-          ))
-        }
-        <button type='button' className={page == totalPages ? 'btn-hidden' : ''} onClick={() => { setPage(page + 1) }}>
-          <svg className='icon-green icon-small'>
-            <use xlinkHref='/img/icons.svg#icon-arrow-right'></use>
-          </svg>
-        </button>
+        <Paginate page={page} setPage={setPage} totalPages={totalPages} />
       </div>
     </main>
   );
