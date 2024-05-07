@@ -47,11 +47,12 @@ export const errorMiddleware = (err, req, res, next) => {
 
   if (env.BUILD_MODE === 'dev') {
     sendErrorDev(err, res)
-  } else {
-    let error
+  } else if (env.BUILD_MODE === 'prod') {
+    let error = { ...err }
+    error.message = err.message
 
-    if (err.name === 'CastError') error = handleCastErrorDB(err)
-    if (err.code === 11000) error = handleDuplicateFieldsDB(err)
+    if (err.name === 'CastError') error = handleCastErrorDB(error)
+    if (err.code === 11000) error = handleDuplicateFieldsDB(error)
     if (err.name === 'ValidationError') error = new ApiError(400, err.message)
     if (err.name === 'JsonWebTokenError')
       error = new ApiError(401, 'Invalid token. Please log in again')
