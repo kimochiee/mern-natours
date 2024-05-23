@@ -40,7 +40,7 @@ function Success() {
     }
 
     createBookingCheckout()
-  })
+  }, [])
 
   return (
     <Loader />

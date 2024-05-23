@@ -14,7 +14,7 @@ function Footer() {
         <li><Link to='#'>Contact</Link></li>
       </ul>
       <p className='footer__copyright'>
-        &copy; by Jonas Schmedtmann. All rights reserved.
+        &copy; by Nguyen Quan
       </p>
     </div>
   )

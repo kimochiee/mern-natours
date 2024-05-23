@@ -1,15 +1,17 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Loader from '../Loader'
 import ReviewItem from './ReviewItem'
 import env from '../../config/env'
 import Paginate from '../Paginate'
+import { UserContext } from '../../context/UserContext'
 
 function MyReviews() {
   const [loading, setLoading] = useState(true)
   const [bookings, setBookings] = useState([])
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
+  const { isTokenExpired } = useContext(UserContext)
 
   useEffect(() => {
     const fetchBookings = async () => {
@@ -25,6 +27,7 @@ function MyReviews() {
 
         if (!res.ok) {
           setLoading(false)
+          return isTokenExpired()
         }
 
         if (data.status === 'success') {

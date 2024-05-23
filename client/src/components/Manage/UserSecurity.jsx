@@ -1,16 +1,15 @@
-import { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { updateUserDataFailure, updateUserPasswordFailure, updateUserPasswordStart, updateUserPasswordSuccess, deactivateOrDeleteUser } from '../../redux/user/userSlice'
-import { notify } from '../../utils/notify'
+import { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { UserContext } from '../../context/UserContext'
+import { notify } from '../../utils/notify'
 import env from '../../config/env'
 
 function UserSecurity() {
-  const { loading } = useSelector((state) => state.user)
+  const { setUser, setUserReady, isTokenExpired } = useContext(UserContext)
   const [userPassword, setUserPassword] = useState({})
   const [userActivity, setUserActivity] = useState('deactivateMe')
+  const [passwordChanging, setPasswordChanging] = useState(false)
   const [activityLoading, setActivityLoading] = useState(false)
-  const dispatch = useDispatch()
   const navigate = useNavigate()
 
   const handleChangeUserPassword = (e) => {
@@ -24,7 +23,7 @@ function UserSecurity() {
     e.preventDefault()
 
     try {
-      dispatch(updateUserPasswordStart())
+      setPasswordChanging(true)
 
       const res = await fetch('http://localhost:8000/api/v1/users/updateMyPassword', {
         method: 'PATCH',
@@ -39,17 +38,18 @@ function UserSecurity() {
 
       if (!res.ok) {
         notify(data.message, 'error')
-        return dispatch(updateUserDataFailure(data.message))
+        setPasswordChanging(false)
+        return isTokenExpired()
       }
 
       if (data.status === 'success') {
         notify('User password updated successfully', 'success')
-        dispatch(updateUserPasswordSuccess())
+        setPasswordChanging(false)
       }
     } catch (error) {
-      console.log(error)
       notify(error.message, 'error')
-      dispatch(updateUserPasswordFailure(error.message))
+      setPasswordChanging(false)
+      console.log(error)
     }
   }
 
@@ -68,12 +68,14 @@ function UserSecurity() {
 
       if (!res.ok) {
         notify(data.message, 'error')
-        return setActivityLoading(false)
+        setActivityLoading(false)
+        return isTokenExpired()
       }
 
       if (data.status === 'success') {
         notify(`User account ${userActivity}d successfully`, 'success')
-        dispatch(deactivateOrDeleteUser())
+        setUser(null)
+        setUserReady(false)
         setActivityLoading(false)
         navigate('/sign-in')
       }
@@ -129,7 +131,7 @@ function UserSecurity() {
             />
           </div>
           <div className='form__group right'>
-            {loading ?
+            {passwordChanging ?
               <button className='btn btn--small btn--green' disabled>Saving...</button>
               :
               <button className='btn btn--small btn--green'>Save password</button>

@@ -3,7 +3,7 @@ let API_ROOT = ''
 if (import.meta.env.DEV) {
   API_ROOT = 'http://localhost:8000'
 } else {
-  API_ROOT = ''
+  API_ROOT = 'https://natours-api-5qfz.onrender.com'
 }
 
 export default {

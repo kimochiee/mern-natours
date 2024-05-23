@@ -1,15 +1,14 @@
-import { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { signInFailure, signInStart, signInSuccess } from '../redux/user/userSlice'
 import { notify } from '../utils/notify'
 import env from '../config/env'
+import { UserContext } from '../context/UserContext'
 
 function Signup() {
+  const { setUser, setUserReady, setToken } = useContext(UserContext)
   const [formData, setFormData] = useState({})
-  const { loading } = useSelector((state) => state.user)
+  const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
-  const dispatch = useDispatch()
 
   const handleChange = (e) => {
     setFormData({
@@ -22,15 +21,17 @@ function Signup() {
     e.preventDefault()
 
     if (!formData.name || !formData.email || !formData.password || !formData.passwordConfirm) {
-      return dispatch(signInFailure('Please fill all the fields'))
+      notify('Please fill all the fields', 'error')
+      return
     }
 
     if (formData.password !== formData.passwordConfirm) {
-      return dispatch(signInFailure('Passwords do not match'))
+      notify('Passwords do not match', 'error')
+      return
     }
 
     try {
-      dispatch(signInStart())
+      setLoading(true)
 
       const res = await fetch(`${env.API_ROOT}/api/v1/users/signup`, {
         method: 'POST',
@@ -45,16 +46,27 @@ function Signup() {
 
       if (!res.ok) {
         notify(data.message, 'error')
-        return dispatch(signInFailure(data.message))
+
+        setLoading(false)
+
+        return
       }
 
       if (data.status === 'success') {
         notify('Sign up successful', 'success')
-        dispatch(signInSuccess(data.data.user))
+
+        setUser(data.data.user)
+        setToken(data.token)
+        localStorage.setItem('token', JSON.stringify(data.token))
+        localStorage.setItem('user', JSON.stringify(data.data.user))
+        setUserReady(true)
+        setLoading(false)
+        setLoading(false)
+
         return navigate('/');
       }
     } catch (error) {
-      dispatch(signInFailure(error.message))
+      notify(error.message, 'error')
       console.error(error.message)
     }
   }

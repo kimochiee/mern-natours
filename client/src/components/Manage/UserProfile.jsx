@@ -1,16 +1,15 @@
-import { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { updateUserDataFailure, updateUserDataStart, updateUserDataSuccess, } from '../../redux/user/userSlice'
+import { useContext, useState } from 'react'
+import { UserContext } from '../../context/UserContext'
 import { notify } from '../../utils/notify'
 import env from '../../config/env'
 
 function UserProfile() {
-  const { currentNatoursUser, loading } = useSelector((state) => state.user)
+  const { user, setUser, isTokenExpired } = useContext(UserContext)
+  const [updating, setUpdating] = useState(false)
   const [userData, setUserData] = useState({
-    name: currentNatoursUser.name,
-    email: currentNatoursUser.email
+    name: user.name,
+    email: user.email
   })
-  const dispatch = useDispatch()
 
   const handleChangeUserData = (e) => {
     if (e.target.name === 'photo') {
@@ -29,12 +28,12 @@ function UserProfile() {
   const handleSubmitUserData = async (e) => {
     e.preventDefault()
 
-    if (userData.name === currentNatoursUser.name && userData.email === currentNatoursUser.email && !userData.photo) {
+    if (userData.name === user.name && userData.email === user.email && !userData.photo) {
       return
     }
 
     try {
-      dispatch(updateUserDataStart())
+      setUpdating(true)
 
       const formData = new FormData()
       formData.append('name', userData.name)
@@ -51,16 +50,19 @@ function UserProfile() {
 
       if (!res.ok) {
         notify(data.message, 'error')
-        return dispatch(updateUserDataFailure(data.message))
+        setUpdating(false)
+        return isTokenExpired()
       }
 
       if (data.status === 'success') {
         notify('User data updated successfully', 'success')
-        dispatch(updateUserDataSuccess(data.data.user))
+        setUser(data.data.user)
+        setUpdating(false)
       }
     } catch (error) {
       notify(error.message, 'error')
-      dispatch(updateUserDataFailure(error.message))
+      setUpdating(false)
+      console.log(error);
     }
   }
 
@@ -76,7 +78,7 @@ function UserProfile() {
               id='name'
               name='name'
               className='form__input'
-              defaultValue={currentNatoursUser.name}
+              defaultValue={user.name}
               required
               onChange={handleChangeUserData}
             />
@@ -88,14 +90,14 @@ function UserProfile() {
               id='email'
               name='email'
               className='form__input'
-              defaultValue={currentNatoursUser.email}
+              defaultValue={user.email}
               required
               onChange={handleChangeUserData}
             />
           </div>
           <div className='form__group form__photo-upload'>
             <img
-              src={currentNatoursUser.photo.startsWith('http') ? currentNatoursUser.photo : `img/users/${currentNatoursUser.photo}`}
+              src={user.photo.startsWith('http') ? user.photo : `img/users/${user.photo}`}
               alt='User photo'
               className='form__user-photo'
             />
@@ -110,7 +112,7 @@ function UserProfile() {
             <label htmlFor='photo'>choose new photo</label>
           </div>
           <div className='form__group right'>
-            {loading ?
+            {updating ?
               <button className='btn btn--small btn--green' disabled>Saving...</button>
               :
               <button className='btn btn--small btn--green'>Save settings</button>

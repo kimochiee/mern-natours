@@ -9,18 +9,46 @@ function Home() {
   const [tours, setTours] = useState([])
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(0)
-  const [sort, setSort] = useState('')
+
+  const handleSortChange = (e) => {
+    const sortvalue = e.target.value
+
+    const sortArray = (array, field, order = 'asc') => {
+      return array.sort((a, b) => {
+        if (order === 'asc') {
+          return a[field] > b[field] ? 1 : -1;
+        } else if (order === 'desc') {
+          return a[field] < b[field] ? 1 : -1;
+        } else {
+          return 0;
+        }
+      });
+    };
+
+    let sortedTours = [...tours]
+
+    if (sortvalue === 'price') {
+      sortedTours = sortArray([...tours], 'price', 'asc');
+    } else if (sortvalue === '-price') {
+      sortedTours = sortArray([...tours], 'price', 'desc');
+    } else if (sortvalue === 'ratingsAverage') {
+      sortedTours = sortArray([...tours], 'ratingsAverage', 'asc');
+    } else if (sortvalue === '-ratingsAverage') {
+      sortedTours = sortArray([...tours], 'ratingsAverage', 'desc');
+    }
+
+    setTours(sortedTours)
+  }
 
   useEffect(() => {
     const fetchTours = async () => {
       try {
         setLoading(true)
 
-        const response = await fetch(`${env.API_ROOT}/api/v1/tours?page=${page}&sort=${sort}`)
-        const data = await response.json()
+        const res = await fetch(`${env.API_ROOT}/api/v1/tours?page=${page}`)
+        const data = await res.json()
 
         setTours(data.data)
-
         setTotalPages(Math.ceil(data.totalDocs / data.maxDocs))
         setLoading(false)
       } catch (error) {
@@ -29,7 +57,7 @@ function Home() {
     }
 
     fetchTours()
-  }, [page, sort])
+  }, [page])
 
   if (loading) {
     return (
@@ -51,7 +79,7 @@ function Home() {
               <svg className='icon-green icon-small icon-down'>
                 <use xlinkHref='/img/icons.svg#icon-chevron-down'></use>
               </svg>
-              <select name='sort' id='sort' onChange={(e) => { setSort(e.target.value) }}>
+              <select name='sort' id='sort' onChange={handleSortChange}>
                 <option value>Newest</option>
                 <option value="price">Price Low to High</option>
                 <option value="-price">Price High to Low</option>

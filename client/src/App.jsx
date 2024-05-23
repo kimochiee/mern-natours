@@ -1,5 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useContext } from 'react'
+import { UserContext } from './context/UserContext'
 
 import Header from './components/Header'
 import Footer from './components/Footer'
@@ -16,17 +17,17 @@ import ResetPassword from './pages/ResetPassword'
 import Success from './pages/Success'
 
 function App() {
-  const { currentnatoursUser } = useSelector((state) => state.user)
+  const { user } = useContext(UserContext)
 
   return (
     <BrowserRouter>
       <Header />
       <Routes>
-        <Route path='/' element={<Home />} />
-        <Route path='/sign-in' element={currentnatoursUser ? <Navigate to='/' /> : <Signin />} />
-        <Route path='/sign-up' element={currentnatoursUser ? <Navigate to='/' /> : <Signup />} />
-        <Route path='/forgot-password' element={currentnatoursUser ? <Navigate to='/' /> : <ForgotPassword />} />
-        <Route path='/reset-password' element={currentnatoursUser ? <Navigate to='/' /> : <ResetPassword />} />
+        <Route index path='/' element={<Home />} />
+        <Route path='/sign-in' element={user ? <Navigate to='/' /> : <Signin />} />
+        <Route path='/sign-up' element={user ? <Navigate to='/' /> : <Signup />} />
+        <Route path='/forgot-password' element={user ? <Navigate to='/' /> : <ForgotPassword />} />
+        <Route path='/reset-password' element={user ? <Navigate to='/' /> : <ResetPassword />} />
         <Route element={<PrivateRoute />}>
           <Route path='/account' element={<Account />} />
         </Route>

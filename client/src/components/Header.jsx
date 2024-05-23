@@ -1,13 +1,12 @@
-import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
-import { logOutSuccess } from '../redux/user/userSlice'
 import { notify } from '../utils/notify'
+import { useContext } from 'react'
+import { UserContext } from '../context/UserContext'
 import env from '../config/env'
 
 function Header() {
-  const { currentNatoursUser } = useSelector((state) => state.user)
   const navigate = useNavigate()
-  const dispatch = useDispatch()
+  const { user, setUser, setUserReady } = useContext(UserContext)
 
   const handleLogOut = async () => {
     try {
@@ -24,7 +23,12 @@ function Header() {
 
       if (data.status === 'success') {
         notify('Log out successful', 'success')
-        dispatch(logOutSuccess())
+
+        localStorage.removeItem('token')
+        localStorage.removeItem('user')
+        setUser(null)
+        setUserReady(false)
+
         navigate('/')
       }
     } catch (error) {
@@ -54,16 +58,16 @@ function Header() {
         <img src='img/logo-white.png' alt='Natours logo' />
       </div>
       <nav className='nav nav--user'>
-        {currentNatoursUser ? (
+        {user ? (
           <>
             <Link className='nav__el nav__el-logout' onClick={handleLogOut}>Log Out</Link>
             <Link to='/account?tab=profile' className='nav__el'>
               <img
-                src={currentNatoursUser.photo.startsWith('http') ? currentNatoursUser.photo : `img/users/${currentNatoursUser.photo}`}
+                src={user.photo.startsWith('http') ? user.photo : `img/users/${user.photo}`}
                 alt='User photo'
                 className='nav__user-img'
               />
-              <span>{currentNatoursUser.name}</span>
+              <span>{user.name}</span>
             </Link>
           </>
         ) : (

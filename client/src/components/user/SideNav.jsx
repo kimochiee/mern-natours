@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import NavItem from './NavItem'
 import { useLocation } from 'react-router-dom'
-import { useSelector } from 'react-redux';
+import { UserContext } from '../../context/UserContext';
 
 function SideNav() {
-  const { currentNatoursUser } = useSelector((state) => state.user)
   const location = useLocation()
   const [tab, setTab] = useState('')
+  const { user } = useContext(UserContext)
 
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search)
@@ -25,7 +25,7 @@ function SideNav() {
         <NavItem link='/account?tab=my-tours' text='My Tours' icon='briefcase' active={tab === 'my-tours' || !tab} />
         <NavItem link='/account?tab=my-reviews' text='My Reviews' icon='star' active={tab === 'my-reviews' || !tab} />
       </ul>
-      {currentNatoursUser.role === 'admin' && (<>
+      {user.role === 'admin' && (<>
         <div className='admin-nav'>
           <h5 className='admin-nav__heading'>Admin</h5>
           <ul className='side-nav'>

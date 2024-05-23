@@ -1,16 +1,16 @@
 import PropTypes from 'prop-types'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
+import { UserContext } from '../../context/UserContext'
 import { notify } from '../../utils/notify'
-import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { localeDate } from '../../utils/localeDate'
 import env from '../../config/env'
 
 function BookingTour({ tour }) {
-  const { currentNatoursUser } = useSelector((state) => state.user)
   const [processing, setProcessing] = useState(false)
   const [tickets, setTickets] = useState(0)
   const [date, setDate] = useState('')
+  const { user, isTokenExpired } = useContext(UserContext)
 
   const handleBookTour = async () => {
     try {
@@ -29,7 +29,8 @@ function BookingTour({ tour }) {
 
       if (!res.ok) {
         setProcessing(false)
-        return notify(data.message, 'error')
+        notify(data.message, 'error')
+        return isTokenExpired()
       }
 
       if (data.status === 'success') {
@@ -110,7 +111,7 @@ function BookingTour({ tour }) {
             </div>
             <div className='center'>
               {
-                currentNatoursUser ?
+                user ?
                   <button type='button' className='btn btn--green btn--large ma-t-lg false' disabled={!date || tickets == 0} onClick={handleBookTour}>
                     {processing ? 'Processing...' : 'Book tour now!'}
                   </button>

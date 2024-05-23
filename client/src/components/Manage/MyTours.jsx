@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
+import { UserContext } from '../../context/UserContext'
 import { Link } from 'react-router-dom'
+import env from '../../config/env'
 
 import Loader from '../Loader'
 import BookingItem from './BookingItem'
-import env from '../../config/env'
 import Paginate from '../Paginate'
 
 function MyTours() {
@@ -11,6 +12,7 @@ function MyTours() {
   const [bookings, setBookings] = useState([])
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
+  const { isTokenExpired } = useContext(UserContext)
 
   useEffect(() => {
     const fetchBookings = async () => {
@@ -26,6 +28,7 @@ function MyTours() {
 
         if (!res.ok) {
           setLoading(false)
+          return isTokenExpired()
         }
 
         if (data.status === 'success') {
