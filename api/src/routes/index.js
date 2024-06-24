@@ -7,6 +7,9 @@ import reviewRouter from './review.routes'
 import bookingRouter from './booking.routes'
 import { ApiError } from '~/utils/ApiError'
 
+router.use('/check', (req, res) => {
+  res.status(200).json({ status: 'success', message: 'Server is running' })
+})
 router.use('/users', userRouter)
 router.use('/tours', tourRouter)
 router.use('/reviews', reviewRouter)

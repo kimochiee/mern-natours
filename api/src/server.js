@@ -1,6 +1,4 @@
 import express from 'express'
-const app = express()
-
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
 
@@ -9,9 +7,13 @@ import router from './routes'
 import { connectDB } from './config/mongodb'
 import { errorMiddleware } from './middlewares/error.middleware'
 import { corsOptions } from './config/cors'
+import job from './cron'
+
+job.start()
+
+const app = express()
 
 app.use(cors(corsOptions))
-
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())

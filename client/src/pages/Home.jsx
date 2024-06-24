@@ -27,7 +27,9 @@ function Home() {
 
     let sortedTours = [...tours]
 
-    if (sortvalue === 'price') {
+    if (sortvalue === '') {
+      sortedTours = sortArray([...tours], 'createdAt', 'desc');
+    } else if (sortvalue === 'price') {
       sortedTours = sortArray([...tours], 'price', 'asc');
     } else if (sortvalue === '-price') {
       sortedTours = sortArray([...tours], 'price', 'desc');
@@ -80,7 +82,7 @@ function Home() {
                 <use xlinkHref='/img/icons.svg#icon-chevron-down'></use>
               </svg>
               <select name='sort' id='sort' onChange={handleSortChange}>
-                <option value>Newest</option>
+                <option value=''>Newest</option>
                 <option value="price">Price Low to High</option>
                 <option value="-price">Price High to Low</option>
                 <option value="ratingsAverage">Rating Low to High</option>
