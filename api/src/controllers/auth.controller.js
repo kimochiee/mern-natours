@@ -25,7 +25,7 @@ export const signUp = catchAsync(async (req, res, next) => {
   const token = signToken(user._id)
 
   res
-    .status(201)
+    .status(200)
     .cookie('jwt', token, {
       expires: new Date(
         Date.now() + env.jwt.COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
