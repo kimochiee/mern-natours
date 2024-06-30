@@ -20,7 +20,12 @@ function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    if (!formData.name || !formData.email || !formData.password || !formData.passwordConfirm) {
+    if (
+      !formData.name ||
+      !formData.email ||
+      !formData.password ||
+      !formData.passwordConfirm
+    ) {
       notify('Please fill all the fields', 'error')
       return
     }
@@ -42,7 +47,11 @@ function Signup() {
         body: JSON.stringify(formData)
       })
 
+      console.log('res: ', res)
+
       const data = await res.json()
+
+      console.log('data: ', data)
 
       if (!res.ok) {
         notify(data.message, 'error')
@@ -63,11 +72,12 @@ function Signup() {
         setLoading(false)
         setLoading(false)
 
-        return navigate('/');
+        return navigate('/')
       }
     } catch (error) {
+      setLoading(false)
       notify(error.message, 'error')
-      console.error(error.message)
+      console.log('error: ', error)
     }
   }
 
@@ -77,7 +87,9 @@ function Signup() {
         <h2 className='heading-secondary ma-bt-lg'>Create new account</h2>
         <form className='form form--login' onSubmit={handleSubmit}>
           <div className='form__group'>
-            <label className='form__label' htmlFor='email'>Your name</label>
+            <label className='form__label' htmlFor='email'>
+              Your name
+            </label>
             <input
               className='form__input'
               name='name'
@@ -88,7 +100,9 @@ function Signup() {
             />
           </div>
           <div className='form__group'>
-            <label className='form__label' htmlFor='email'>Email address</label>
+            <label className='form__label' htmlFor='email'>
+              Email address
+            </label>
             <input
               className='form__input'
               name='email'
@@ -99,7 +113,9 @@ function Signup() {
             />
           </div>
           <div className='form__group ma-bt-md'>
-            <label className='form__label' htmlFor='password'>Password</label>
+            <label className='form__label' htmlFor='password'>
+              Password
+            </label>
             <input
               className='form__input'
               name='password'
@@ -111,7 +127,9 @@ function Signup() {
             />
           </div>
           <div className='form__group ma-bt-md'>
-            <label className='form__label' htmlFor='password'>Confirm Password</label>
+            <label className='form__label' htmlFor='password'>
+              Confirm Password
+            </label>
             <input
               className='form__input'
               name='passwordConfirm'
@@ -124,7 +142,9 @@ function Signup() {
           </div>
           <div className='form__group'>
             {loading ? (
-              <button className='btn btn--green' disabled>Loading...</button>
+              <button className='btn btn--green' disabled>
+                Loading...
+              </button>
             ) : (
               <button className='btn btn--green'>Sign up</button>
             )}
